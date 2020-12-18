@@ -1,5 +1,8 @@
 name: remote ssh deplyment
-on: [push]
+on:
+  push:
+    branches:
+      - master
 jobs:
   build:
     name: Build
@@ -12,6 +15,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            whoami
-            pwd
+            cd e-commerce
+            git pull -all
             ls -la
