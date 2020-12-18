@@ -16,5 +16,5 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd e-commerce
-            git pull -all
+            git pull
             ls -la
