@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 
 import {itemActions} from "../_actions/item.actions";
 import {userActions} from "../_actions";
-import {CategoryItem} from "../ItemsComponents";
 
 
 const HomePage = (props) => {

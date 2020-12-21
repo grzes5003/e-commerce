@@ -7,7 +7,7 @@ import {alertActions} from '../_actions';
 import {PrivateRoute} from '../_components';
 import {HomePage} from '../HomePage';
 import {LoginPage} from '../LoginPage';
-import {CategoryItem} from "../ItemsComponents";
+import {CategoryItem, ProductDetailsPage} from "../ItemsComponents";
 
 function App(props) {
 
@@ -36,7 +36,7 @@ function App(props) {
                             <Route exact path="/" component={HomePage}/>
                             <Route path="/login" component={LoginPage}/>
                         </div>
-                        <Route exact path="/product/:prodId" component={CategoryItem}/>
+                        <Route exact path="/product/:prodId" component={ProductDetailsPage}/>
                     </Router>
                 </div>
             </div>
