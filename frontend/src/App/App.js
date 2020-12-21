@@ -7,6 +7,7 @@ import {alertActions} from '../_actions';
 import {PrivateRoute} from '../_components';
 import {HomePage} from '../HomePage';
 import {LoginPage} from '../LoginPage';
+import {CategoryItem} from "../ItemsComponents";
 
 function App(props) {
 
@@ -32,9 +33,10 @@ function App(props) {
                     }
                     <Router history={history}>
                         <div>
-                            <PrivateRoute exact path="/" component={HomePage}/>
+                            <Route exact path="/" component={HomePage}/>
                             <Route path="/login" component={LoginPage}/>
                         </div>
+                        <Route exact path="/product/:prodId" component={CategoryItem}/>
                     </Router>
                 </div>
             </div>

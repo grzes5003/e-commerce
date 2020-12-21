@@ -6,14 +6,15 @@ const port = 4000;
 
 let corsOptions = {
     origin: true,
-    credentials : true
+    credentials: true
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 const users = [{id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User'}];
+const categories = [{id: 0, name: 'uno'}, {id: 1, name: 'duo'}, {id: 2, name: 'trhes'}];
 
 app.get('/', function (req, res) {
     res.send('Hello Sir')
@@ -58,11 +59,21 @@ app.get('/users', function (req, res) {
     res.setHeader('Access-Control-Allow-Credentials', true);
 
     if (req.headers && req.headers.authorization === 'Bearer fake-jwt-token') {
-        res.status(200).send({ ok: true, text: users});
+        res.status(200).send({ok: true, text: users});
     } else {
         // return 401 not authorised if token is null or invalid
         res.status(401).send('Unauthorised');
     }
+});
+
+app.get('/categories', function (req, res) {
+    console.log("categories/ req: ", req.headers);
+    res.status(200).send({ok: true, categories: categories});
+});
+
+app.get('/product/:prodId', function (req, res) {
+    const id = req.params.prodId;
+    res.status(200).send({id: id, name: 'name' + id});
 });
 
 app.listen(port, () => {

@@ -4,9 +4,7 @@ import {alertActions} from './';
 import {history} from '../_helpers';
 
 const login = (username, password) => {
-    console.log("TUTAJ: " + username + password);
     return dispatch => {
-        console.log("DISPATCH ", dispatch);
         dispatch(request({username}));
 
         userService.login(username, password)
@@ -16,7 +14,6 @@ const login = (username, password) => {
                     history.push('/');
                 },
                 error => {
-                    console.log("PRV ERROR LOGIN: error=", error);
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }
@@ -67,6 +64,8 @@ const getAll = () => {
         return {type: userConstants.GETALL_FAILURE, error}
     }
 }
+
+
 
 export const userActions = {
     login,
