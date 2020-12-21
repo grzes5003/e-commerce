@@ -51,5 +51,5 @@ const getProdDetails = (prodId) => {
 
 export const itemActions = {
     getAllCategories,
-    getProdDetails
+    getProdDetails,
 };

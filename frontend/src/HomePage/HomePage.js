@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 
 import {itemActions} from "../_actions/item.actions";
 import {userActions} from "../_actions";
+import {ProductItem} from "../ItemsComponents";
+import {componentConstants} from "../_constants";
 
 
 const HomePage = (props) => {
@@ -16,7 +18,7 @@ const HomePage = (props) => {
         window.location.reload(false);
     };
 
-    const {user, items, loggedIn} = props;
+    const {user, cart, items, loggedIn} = props;
     console.log("HomePage: ", props);
     return (
         <div className="col-md-6 col-md-offset-3">
@@ -29,7 +31,7 @@ const HomePage = (props) => {
             <ul>
                 {items.categories.categories.map((category, index) =>
                     <li key={category.id}>
-                        <Link to={`/product/${category.id}`}>{category.id}</Link>
+                        <ProductItem product={category} type={componentConstants.BIG_COMPONENT}/>
                     </li>
                 )}
             </ul>
@@ -42,18 +44,27 @@ const HomePage = (props) => {
                     <Link to="/login">Login</Link>
                 }
             </p>
+
+            <div>
+                <ul>
+                    {cart.cart && cart.cart.map((product, index) =>
+                        <ProductItem product={product} type={componentConstants.SMALL_COMPONENT}/>
+                    )}
+                </ul>
+            </div>
         </div>
     )
 }
 
 function mapStateToProps(state) {
     console.log("STATE:::: ", state);
-    const {items, authentication} = state;
+    const {items, cart, authentication} = state;
     const {user, loggedIn} = authentication;
     return {
         loggedIn,
         user,
-        items
+        items,
+        cart
     };
 }
 
