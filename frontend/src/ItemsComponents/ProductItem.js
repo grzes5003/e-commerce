@@ -8,7 +8,7 @@ const ProductItem = props => {
 
     console.log('product: ', props);
     const {product, type} = props;
-    const {name, id} = product;
+    const {name, id, price} = product;
 
     const handleAddToChart = (e) => {
         e.preventDefault();
@@ -25,7 +25,7 @@ const ProductItem = props => {
     if (type === componentConstants.BIG_COMPONENT) {
         return (
             <div>
-                <Link to={`/product/${id}`}>{id}</Link>: {name} |
+                <Link to={`/product/${id}`}>{id}</Link>: {name} | {price}
                 <div onClick={handleAddToChart}>Add to chart</div>
             </div>
         )

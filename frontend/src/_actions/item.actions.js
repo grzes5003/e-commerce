@@ -25,6 +25,30 @@ const getAllCategories = () => {
     }
 }
 
+const getAllFiltered = (filter) => {
+    return dispatch => {
+        dispatch(request())
+
+        itemService.getAllFiltered(filter)
+            .then(
+                products => dispatch(success(products)),
+                error => dispatch(failure(error))
+            );
+    }
+
+    function request() {
+        return {type: itemConstants.GET_PROD_FILT_REQ}
+    }
+
+    function success(products) {
+        return {type: itemConstants.GET_PROD_FILT_SUC, products}
+    }
+
+    function failure(error) {
+        return {type: itemConstants.GET_PROD_FILT_FAIL, error}
+    }
+}
+
 const getProdDetails = (prodId) => {
     return dispatch => {
         dispatch(request())
@@ -52,4 +76,5 @@ const getProdDetails = (prodId) => {
 export const itemActions = {
     getAllCategories,
     getProdDetails,
+    getAllFiltered
 };

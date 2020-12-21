@@ -30,6 +30,20 @@ export function items(state = {}, action) {
             return {
                 error: action.error
             };
+
+            // get filtered products
+        case itemConstants.GET_PROD_FILT_REQ:
+            return {
+                loading: true
+            };
+        case itemConstants.GET_PROD_FILT_SUC:
+            return {
+                products: action.products
+            };
+        case itemConstants.GET_PROD_FILT_FAIL:
+            return {
+                error: action.error
+            };
         default:
             return state
     }

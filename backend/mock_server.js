@@ -3,6 +3,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express();
 const port = 4000;
+const faker = require('faker');
 
 let corsOptions = {
     origin: true,
@@ -13,21 +14,33 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+const generateFakeProducts = () => {
+    const buty = [...Array(100).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 0}));
+    const spodnie = [...Array(50).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 1}));
+    const sukienki = [...Array(26).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 2}));
+    const inne = [...Array(71).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 3}));
+    const dresy = [...Array(12).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 4}));
+
+    return [...buty, ...spodnie, ...sukienki, ...inne, ...dresy];
+}
+
+const products = generateFakeProducts();
+
 const users = [{id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User'}];
-const categories = [{id: 0, name: 'buty'}, {id: 1, name: 'spodnie'}, {id: 2, name: 'sukienki'}];
-const products = [
-    {id: 0, name: "Abibasy", cat: 0},
-    {id: 1, name: "Najki", cat: 0},
-    {id: 2, name: "CCC", cat: 0},
-
-    {id: 3, name: "suknia", cat: 2},
-    {id: 4, name: "dresik", cat: 2},
-
-    {id: 5, name: "jeansy", cat: 1},
-    {id: 6, name: "zamszowe", cat: 1},
-    {id: 7, name: "orkiszowe", cat: 1}
-
-]
+const categories = [{id: 0, name: 'buty'}, {id: 1, name: 'spodnie'}, {id: 2, name: 'sukienki'}, {id: 3, name: 'inne'}, {id: 4, name: 'dresy'}];
+// const products = [
+//     {id: 0, name: "Abibasy", cat: 0, price: 102},
+//     {id: 1, name: "Najki", cat: 0, price: 99},
+//     {id: 2, name: "CCC", cat: 0, price: 265},
+//
+//     {id: 3, name: "suknia", cat: 2, price: 10},
+//     {id: 4, name: "dresik", cat: 2, price: 60},
+//
+//     {id: 5, name: "jeansy", cat: 1, price: 149},
+//     {id: 6, name: "zamszowe", cat: 1, price: 101},
+//     {id: 7, name: "orkiszowe", cat: 1, price: 999}
+//
+// ]
 
 app.get('/', function (req, res) {
     res.send('Hello Sir')
@@ -86,22 +99,48 @@ app.get('/categories', function (req, res) {
 
 app.get('/products', function (req, res) {
     let cats = req.query.cat;
+    let limit = req.query.limit;
+    let offset = req.query.offset;
+
+    let max_num = 0;
+
+    console.log('query: ', req.query);
+    console.log('rest: ', limit, ' ', offset);
+
     let findProd = [];
     try {
         console.log(cats);
-        if (cats.length) {
+        if (cats && cats.length) {
             let c = JSON.parse(cats);
             console.log('parse',c);
-            findProd.push(products.filter(prod => {
+            findProd = products.filter(prod => {
                 return Array.isArray(c) ? c.includes(prod.cat) : prod.cat === c;
-            }));
+            });
             console.log('find ',findProd);
+        } else {
+            findProd = products;
         }
+
+        max_num = findProd.length;
+
+        if (offset && offset.length) {
+            let off = JSON.parse(offset);
+            console.log('parse offset',off);
+            findProd.splice(0,off);
+        }
+
+        if (limit && limit.length) {
+            let lim = JSON.parse(limit);
+            console.log('parse limit',lim);
+            findProd = findProd.slice(0,lim);
+            console.log('parsed limit === ',findProd.slice(0,lim));
+        }
+
     } catch (e) {
         res.status(400).send("bad req");
         return;
     }
-    res.status(200).send(findProd);
+    res.status(200).send({products: findProd, numOfResults: max_num});
 });
 
 app.get('/product/:prodId', function (req, res) {

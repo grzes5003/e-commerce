@@ -31,7 +31,7 @@ const HomePage = (props) => {
             <ul>
                 {items.categories.categories.map((category, index) =>
                     <li key={category.id}>
-                        <ProductItem product={category} type={componentConstants.BIG_COMPONENT}/>
+                        <Link to={`/category/${category.id}`}>{category.id}</Link>: {category.name}
                     </li>
                 )}
             </ul>

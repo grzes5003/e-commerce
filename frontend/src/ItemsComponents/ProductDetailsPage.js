@@ -1,5 +1,5 @@
 import {React, useEffect} from 'react';
-import {itemActions} from "../_actions/item.actions";
+import {itemActions} from "../_actions";
 import {connect} from "react-redux";
 
 
