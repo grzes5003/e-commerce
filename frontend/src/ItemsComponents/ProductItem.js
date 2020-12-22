@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 import {cartActions} from "../_actions";
 import {Link} from "react-router-dom";
 import {componentConstants} from "../_constants";
+import {Button, Card} from "@blueprintjs/core";
+import {Elevation} from "@blueprintjs/core/lib/esnext/common/elevation";
 
 const ProductItem = props => {
 
@@ -24,10 +26,11 @@ const ProductItem = props => {
     }
     if (type === componentConstants.BIG_COMPONENT) {
         return (
-            <div>
-                <Link to={`/product/${id}`}>{id}</Link>: {name} | {price}
-                <div onClick={handleAddToChart}>Add to chart</div>
-            </div>
+                <Card interactive={true} elevation={Elevation.TWO}>
+                    <h5><Link to={`/product/${id}`}>{name}</Link></h5>
+                    <p>Price: {price}</p>
+                    <Button onClick={handleAddToChart}>Add to cart</Button>
+                </Card>
         )
     }
 

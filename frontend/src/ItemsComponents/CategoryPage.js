@@ -4,6 +4,7 @@ import {itemActions} from "../_actions";
 import {createFilter} from "../_helpers/create-filter";
 import {ProductItem} from "./ProductItem";
 import {componentConstants} from "../_constants";
+import {Navbar} from "../LayoutComponents";
 
 const CategoryPage = props => {
     const {catId, items} = props;
@@ -15,16 +16,17 @@ const CategoryPage = props => {
 
     return (
         <div>
+            <Navbar/>
             <div>Hello</div>
             {items.products && items.products.loading && <div>Loading...</div>}
             {items.products && items.products.products &&
-            <ul>
+            <div className='display: flex'>
                 {items.products.products.map((product, index) =>
-                    <li key={product.id}>
+                    <div key={product.id}>
                         <ProductItem product={product} type={componentConstants.BIG_COMPONENT}/>
-                    </li>
+                    </div>
                 )}
-            </ul>
+            </div>
             }
         </div>
     )

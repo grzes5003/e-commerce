@@ -1,0 +1,37 @@
+$assetPath: '../_resources';
+
+.window {
+  height: 100vh;
+  width: 100%;
+}
+
+.banner {
+  background-image: url(#{$assetPath}/img/baner_homepage.jpg);
+  min-height: 30%;
+}
+
+.mainContainer {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 1200px) {
+  .mainContainer {
+    max-width: 1140px;
+  }
+}
+
+.categoriesList {
+  margin: 0 auto;
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.categoryItem {
+  padding: 15px;
+}
+

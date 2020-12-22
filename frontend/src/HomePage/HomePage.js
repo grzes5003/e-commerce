@@ -2,10 +2,12 @@ import {React, useEffect} from 'react';
 import {Link, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import {itemActions} from "../_actions/item.actions";
-import {userActions} from "../_actions";
-import {ProductItem} from "../ItemsComponents";
+import {userActions, itemActions} from "../_actions";
+import {CategoryItem, ProductItem} from "../ItemsComponents";
 import {componentConstants} from "../_constants";
+
+import {Button} from "@blueprintjs/core";
+import {Navbar} from "../LayoutComponents";
 
 
 const HomePage = (props) => {
@@ -18,39 +20,38 @@ const HomePage = (props) => {
         window.location.reload(false);
     };
 
-    const {user, cart, items, loggedIn} = props;
+    const {user, cart, items, loggedIn, history} = props;
     console.log("HomePage: ", props);
     return (
-        <div className="col-md-6 col-md-offset-3">
-            {user && <h1>Hi {user.text.firstName}!</h1>}
-            <p>You're logged in with React & JWT!!</p>
-            <h3>Users from secure api end point:</h3>
-            {items.loading && <em>Loading users...</em>}
-            {items.error && <span className="text-danger">ERROR: {items.error}</span>}
-            {items.categories && items.categories.ok &&
-            <ul>
-                {items.categories.categories.map((category, index) =>
-                    <li key={category.id}>
-                        <Link to={`/category/${category.id}`}>{category.id}</Link>: {category.name}
-                    </li>
-                )}
-            </ul>
-            }
+        <div className='window'>
+            <Navbar history={history}/>
+            <div className='banner'/>
+            <div className='container'>
+                <div className='row h-row'>
+                    {user && <h1>Hi {user.text.firstName}!</h1>}
+                </div>
+                <div className='row'>
+                    {items.loading && <em>Loading users...</em>}
+                    {items.error && <span className="text-danger">ERROR: {items.error}</span>}
+                    {items.categories && items.categories.ok &&
 
-            <p>
-                {loggedIn ?
-                    <Link to="/" onClick={handleLogoutAction}>Logout</Link>
-                    :
-                    <Link to="/login">Login</Link>
-                }
-            </p>
+                    items.categories.categories.map((category, index) =>
+                        <div key={category.id} className='col-md-4'>
+                            <div className='categoryItem'>
+                                <CategoryItem category={category}/>
+                            </div>
+                        </div>
+                    )
 
-            <div>
-                <ul>
-                    {cart.cart && cart.cart.map((product, index) =>
-                        <ProductItem product={product} type={componentConstants.SMALL_COMPONENT}/>
-                    )}
-                </ul>
+                    }
+                    <div>
+                        <ul>
+                            {cart.cart && cart.cart.map((product, index) =>
+                                <ProductItem product={product} type={componentConstants.SMALL_COMPONENT}/>
+                            )}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     )
@@ -58,13 +59,14 @@ const HomePage = (props) => {
 
 function mapStateToProps(state) {
     console.log("STATE:::: ", state);
-    const {items, cart, authentication} = state;
+    const {items, cart, authentication, history} = state;
     const {user, loggedIn} = authentication;
     return {
         loggedIn,
         user,
         items,
-        cart
+        cart,
+        history
     };
 }
 

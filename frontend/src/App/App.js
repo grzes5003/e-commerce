@@ -9,6 +9,8 @@ import {HomePage} from '../HomePage';
 import {LoginPage} from '../LoginPage';
 import {CategoryItem, CategoryPage, ProductDetailsPage} from "../ItemsComponents";
 
+import '../_styles/index.scss';
+
 function App(props) {
 
     console.log("APP PROPS: ", props);
@@ -25,9 +27,9 @@ function App(props) {
     const {alert} = props;
 
     return (
-        <div className="jumbotron">
-            <div className="container">
-                <div className="col-sm-8 col-sm-offset-2">
+        <div>
+            <div>
+                <div>
                     {alert.message &&
                     <div className={`alert ${alert.type}`}>{alert.message}</div>
                     }
