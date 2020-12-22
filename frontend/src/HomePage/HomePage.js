@@ -21,7 +21,6 @@ const HomePage = (props) => {
     };
 
     const {user, cart, items, loggedIn, history} = props;
-    console.log("HomePage: ", props);
     return (
         <div className='window'>
             <Navbar history={history}/>
@@ -42,15 +41,7 @@ const HomePage = (props) => {
                             </div>
                         </div>
                     )
-
                     }
-                    <div>
-                        <ul>
-                            {cart.cart && cart.cart.map((product, index) =>
-                                <ProductItem product={product} type={componentConstants.SMALL_COMPONENT}/>
-                            )}
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -58,7 +49,6 @@ const HomePage = (props) => {
 }
 
 function mapStateToProps(state) {
-    console.log("STATE:::: ", state);
     const {items, cart, authentication, history} = state;
     const {user, loggedIn} = authentication;
     return {

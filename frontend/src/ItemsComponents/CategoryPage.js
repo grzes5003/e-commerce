@@ -23,7 +23,7 @@ const CategoryPage = props => {
             <div className='display: flex'>
                 {items.products.products.map((product, index) =>
                     <div key={product.id}>
-                        <ProductItem product={product} type={componentConstants.BIG_COMPONENT}/>
+                        <ProductItem product={product} type={componentConstants.CATALOG_PRODUCT}/>
                     </div>
                 )}
             </div>

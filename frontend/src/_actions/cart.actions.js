@@ -1,5 +1,7 @@
 import {cartService} from "../_services";
 import {cartConstants} from "../_constants";
+import {alertActions} from "./alert.actions";
+import {Intent} from "@blueprintjs/core/lib/esnext/common/intent";
 
 const addProdToCart = (prodId) => {
     return dispatch => {
@@ -7,7 +9,14 @@ const addProdToCart = (prodId) => {
 
         cartService.addProdToCart(prodId)
             .then(
-                product => dispatch(success(product)),
+                product => {
+                    dispatch(success(product));
+                    dispatch(alertActions.toast({
+                        icon: 'tick-circle',
+                        intent: Intent.SUCCESS,
+                        message: 'Added to cart',
+                    }))
+                },
                 error => dispatch(failure(error))
             );
     }

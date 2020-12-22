@@ -19,12 +19,22 @@ const ProductItem = props => {
 
     if (type === componentConstants.SMALL_COMPONENT) {
         return (
-            <div>
-                <Link to={`/product/${id}`}>{id}</Link>: {name}
-            </div>
+            <Card interactive={true}>
+                <h5><Link to={`/product/${id}`}>{name}</Link></h5>
+                <p>$ {price}</p>
+            </Card>
         )
     }
-    if (type === componentConstants.BIG_COMPONENT) {
+
+    if (type === componentConstants.CART_PRODUCT) {
+        return (
+            <Card interactive={true} elevation={Elevation.TWO}>
+                <h5><Link to={`/product/${id}`}>{name}</Link></h5>
+                <p>Price: {price}</p>
+            </Card>
+        )
+    }
+    if (type === componentConstants.CATALOG_PRODUCT) {
         return (
                 <Card interactive={true} elevation={Elevation.TWO}>
                     <h5><Link to={`/product/${id}`}>{name}</Link></h5>

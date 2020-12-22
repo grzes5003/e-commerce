@@ -1,6 +1,10 @@
 import { alertConstants } from '../_constants';
 
-export function alert(state = {}, action) {
+const initialState = {
+    toastQueue: [],
+};
+
+export function alert(state = initialState, action) {
     switch (action.type) {
         case alertConstants.SUCCESS:
             return {
@@ -14,6 +18,18 @@ export function alert(state = {}, action) {
             };
         case alertConstants.CLEAR:
             return {};
+        case alertConstants.ENQUEUE_TOAST: {
+            return {
+                ...state,
+                // toastQueue: [...state.toastQueue, action.toast],
+                toastQueue: [action.toast],
+            };
+        }
+        case alertConstants.CLEAR_TOASTS:
+            return {
+                ...state,
+                toastQueue: []
+            };
         default:
             return state
     }
