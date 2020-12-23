@@ -10,4 +10,11 @@ export const itemConstants = {
     GET_PROD_FILT_REQ: 'PRODUCT_GET_FILTERED_REQUEST',
     GET_PROD_FILT_SUC: 'PRODUCT_GET_FILTERED_SUCCESS',
     GET_PROD_FILT_FAIL: 'PRODUCT_GET_FILTERED_FAILURE',
+
+    // items sorting
+    AZ_DESC: 'sort-alphabetical-desc',
+    AZ_ASC: 'sort-alphabetical',
+
+    NUM_ASC: 'sort-asc',
+    NUM_DESC: 'sort-desc'
 }

@@ -19,28 +19,34 @@ const ProductItem = props => {
 
     if (type === componentConstants.SMALL_COMPONENT) {
         return (
-            <Card interactive={true}>
-                <h5><Link to={`/product/${id}`}>{name}</Link></h5>
-                <p>$ {price}</p>
-            </Card>
+            <div className='productWrapper'>
+                <Card interactive={true}>
+                    <h5><Link to={`/product/${id}`}>{name}</Link></h5>
+                    <p>$ {price}</p>
+                </Card>
+            </div>
         )
     }
 
     if (type === componentConstants.CART_PRODUCT) {
         return (
-            <Card interactive={true} elevation={Elevation.TWO}>
-                <h5><Link to={`/product/${id}`}>{name}</Link></h5>
-                <p>Price: {price}</p>
-            </Card>
+            <div className='productWrapper'>
+                <Card interactive={true} elevation={Elevation.TWO}>
+                    <h5><Link to={`/product/${id}`}>{name}</Link></h5>
+                    <p>Price: {price}</p>
+                </Card>
+            </div>
         )
     }
     if (type === componentConstants.CATALOG_PRODUCT) {
         return (
+            <div className='productWrapper'>
                 <Card interactive={true} elevation={Elevation.TWO}>
                     <h5><Link to={`/product/${id}`}>{name}</Link></h5>
                     <p>Price: {price}</p>
                     <Button onClick={handleAddToChart}>Add to cart</Button>
                 </Card>
+            </div>
         )
     }
 
