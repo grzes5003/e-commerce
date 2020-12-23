@@ -16,13 +16,15 @@ const getAllFiltered = (filter) => {
         method: 'GET'
     };
 
+    console.log('FILER: ', filter.categories);
+
     let params = new URLSearchParams();
 
     if (filter.categories) {
         params.append('cat', filter.categories);
     }
 
-    if (filter.offset) {
+    if (filter.offset !== undefined && filter.offset !== null) {
         params.append('offset', filter.offset);
     }
 
@@ -30,9 +32,17 @@ const getAllFiltered = (filter) => {
         params.append('limit', filter.limit);
     }
 
+    if (filter.sort) {
+        params.append('sort', filter.sort);
+    }
+
+    if (filter.order) {
+        params.append('order', filter.order);
+    }
+
     console.log('params: ', params.toString());
 
-    return fetch(`${config.apiUrl}/products?`+params.toString(), requestOptions).then(handleResponse)
+    return fetch(`${config.apiUrl}/products?` + params.toString(), requestOptions).then(handleResponse)
 }
 
 const getProdDetails = (prodId) => {
@@ -40,7 +50,7 @@ const getProdDetails = (prodId) => {
         method: 'GET'
     };
 
-    return fetch(`${config.apiUrl}/product/`+prodId, requestOptions).then(handleResponse)
+    return fetch(`${config.apiUrl}/product/` + prodId, requestOptions).then(handleResponse)
 }
 
 export const itemService = {

@@ -20,17 +20,19 @@ const CartDetailsPage = (props) => {
             <Navbar/>
             <div className='container'>
                 <h1>CART</h1>
-                <div>
-                    <NonIdealState
-                        icon="search"
-                        title="Empty cart"
-                        description="Your cart is empty"
-                        action={
-                            <Button onClick={handleHomeRedirect} intent={Intent.SUCCESS}>Go find new products</Button>
-                        }
-                    />
-                </div>
-
+                { !cart.cart || cart.cart.length === 0 &&
+                    <div>
+                        <NonIdealState
+                            icon="search"
+                            title="Empty cart"
+                            description="Your cart is empty"
+                            action={
+                                <Button onClick={handleHomeRedirect} intent={Intent.SUCCESS}>Go find new
+                                    products</Button>
+                            }
+                        />
+                    </div>
+                }
                 <div>
                     {cart.cart.map((product, index) =>
                         <div key={product.id}>

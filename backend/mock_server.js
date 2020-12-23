@@ -15,11 +15,44 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 const generateFakeProducts = () => {
-    const buty = [...Array(100).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 0}));
-    const spodnie = [...Array(50).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 1}));
-    const sukienki = [...Array(26).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 2}));
-    const inne = [...Array(71).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 3}));
-    const dresy = [...Array(12).keys()].map((x) => ({id: x, name: faker.commerce.productName(), price: faker.commerce.price(), cat: 4}));
+    let quantity = {
+        buty: 100,
+        spodnie: 50,
+        sukienki: 26,
+        inne: 71,
+        dresy: 12
+    }
+
+    const buty = [...Array(quantity.buty).keys()].map((x) => ({
+        id: x,
+        name: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        cat: 0
+    }));
+    const spodnie = [...Array(quantity.spodnie).keys()].map((x) => ({
+        id: x + quantity.buty,
+        name: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        cat: 1
+    }));
+    const sukienki = [...Array(quantity.sukienki).keys()].map((x) => ({
+        id: x + quantity.buty + quantity.spodnie,
+        name: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        cat: 2
+    }));
+    const inne = [...Array(quantity.inne).keys()].map((x) => ({
+        id: x + quantity.buty + quantity.spodnie + quantity.sukienki,
+        name: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        cat: 3
+    }));
+    const dresy = [...Array(quantity.dresy).keys()].map((x) => ({
+        id: x + quantity.buty + quantity.spodnie + quantity.sukienki + quantity.inne,
+        name: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        cat: 4
+    }));
 
     return [...buty, ...spodnie, ...sukienki, ...inne, ...dresy];
 }
@@ -27,7 +60,10 @@ const generateFakeProducts = () => {
 const products = generateFakeProducts();
 
 const users = [{id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User'}];
-const categories = [{id: 0, name: 'buty'}, {id: 1, name: 'spodnie'}, {id: 2, name: 'sukienki'}, {id: 3, name: 'inne'}, {id: 4, name: 'dresy'}];
+const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'}, {
+    id: 3,
+    name: 'Inne'
+}, {id: 4, name: 'Dresy'}];
 // const products = [
 //     {id: 0, name: "Abibasy", cat: 0, price: 102},
 //     {id: 1, name: "Najki", cat: 0, price: 99},
@@ -97,46 +133,88 @@ app.get('/categories', function (req, res) {
     res.status(200).send({ok: true, categories: categories});
 });
 
+app.get('/products/from/list', function (req, res) {
+    let idList = req.query.id;
+
+    let findProd = [];
+    try {
+        console.log('idlist: ', typeof idList)
+        let ids = JSON.parse(idList);
+        findProd = products.filter(prod => {
+            return Array.isArray(ids) ? ids.includes(prod.id) : prod.id === ids;
+        });
+
+    } catch (e) {
+        console.log('error: ', e);
+        res.status(400).send("bad req");
+        return;
+    }
+    res.status(200).send({products: findProd});
+});
+
 app.get('/products', function (req, res) {
     let cats = req.query.cat;
     let limit = req.query.limit;
     let offset = req.query.offset;
+    let order = req.query.order;
+    let _sort = req.query.sort;
 
     let max_num = 0;
 
     console.log('query: ', req.query);
-    console.log('rest: ', limit, ' ', offset);
+    console.log('rest: ', limit, ' ', _sort);
 
     let findProd = [];
     try {
         console.log(cats);
         if (cats && cats.length) {
             let c = JSON.parse(cats);
-            console.log('parse',c);
+            console.log('parse', c);
             findProd = products.filter(prod => {
                 return Array.isArray(c) ? c.includes(prod.cat) : prod.cat === c;
             });
-            console.log('find ',findProd);
+            // console.log('find ',findProd);
         } else {
             findProd = products;
         }
 
         max_num = findProd.length;
 
+        if (_sort && _sort.length) {
+            console.log('sort: ', _sort);
+            let sor = _sort;
+
+            let ord = 'asc';
+            if (order && order.length) {
+                let ord = order;
+                console.log('order = ', ord);
+            }
+            if (ord === 'asc' && sor === 'price') {
+                findProd.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0));
+            } else if (ord === 'desc' && sor === 'price') {
+                findProd.sort((a, b) => (b.price > a.price) ? 1 : ((a.price > b.price) ? -1 : 0));
+            } else if (ord === 'asc' && sor === 'name') {
+                findProd.sort((a, b) => (a.name[0] > b.name[0]) ? 1 : ((b.name[0] > a.name[0]) ? -1 : 0));
+            } else if (ord === 'desc' && sor === 'name') {
+                findProd.sort((a, b) => (a.name[0] < b.name[0]) ? 1 : ((b.name[0] < a.name[0]) ? -1 : 0));
+            }
+        }
+
         if (offset && offset.length) {
             let off = JSON.parse(offset);
-            console.log('parse offset',off);
-            findProd.splice(0,off);
+            console.log('parse offset', off);
+            findProd.splice(0, off);
         }
 
         if (limit && limit.length) {
             let lim = JSON.parse(limit);
-            console.log('parse limit',lim);
-            findProd = findProd.slice(0,lim);
-            console.log('parsed limit === ',findProd.slice(0,lim));
+            console.log('parse limit', lim);
+            findProd = findProd.slice(0, lim);
+            console.log('parsed limit === ', findProd.slice(0, lim));
         }
 
     } catch (e) {
+        console.log('error: ', e);
         res.status(400).send("bad req");
         return;
     }

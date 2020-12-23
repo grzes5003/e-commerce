@@ -4,7 +4,7 @@ import {Router, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {history} from '../_helpers';
-import {alertActions} from '../_actions';
+import {alertActions, cartActions} from '../_actions';
 import {PrivateRoute} from '../_components';
 import {HomePage} from '../HomePage';
 import {LoginPage} from '../LoginPage';
@@ -29,6 +29,7 @@ function App(props) {
     // };
 
     useEffect(() => {
+        dispatch(cartActions.loadCartAfterReload());
         history.listen((location, action) => {
             dispatch(alertActions.clearToasts());
         })
