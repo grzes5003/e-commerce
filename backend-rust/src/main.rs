@@ -1,16 +1,20 @@
 mod model;
 mod api;
 mod deserializer;
+mod auth;
 
 use std::io::Read;
 
 use actix_files::Files;
 use actix_web::{middleware, web, App, HttpResponse, HttpServer, Responder};
+use actix_session::{Session, CookieSession};
 use std::iter::Product;
 
 use model::{Product as Prod, Database};
 use crate::model::{CmpName, CmpPrice};
-use crate::api::{get_product, get_all_categories, get_filtered_products, get_products_from_list};
+use crate::api::cart_handlers::add_to_cart;
+use crate::api::item_handlers::{get_all_categories, get_product, get_filtered_products, get_products_from_list};
+use crate::api::user_handlers::login;
 
 async fn index() -> impl Responder {
     match std::fs::File::open("../frontend/build/index.html") {
@@ -44,12 +48,16 @@ async fn echo() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db = Database::new(4,200);
+    let db = Database::new(4, 200);
 
     HttpServer::new(move || {
         App::new()
             .data(db.clone())
             .wrap(middleware::Logger::default())
+            .wrap(
+                CookieSession::signed(&[0; 32]) // <- create cookie based session middleware
+                    .secure(false)
+            )
             .service(Files::new("/static", "../frontend/build/static"))
             .service(
                 web::scope("/api")
@@ -59,6 +67,10 @@ async fn main() -> std::io::Result<()> {
                     .service(get_all_categories)
                     .service(get_filtered_products)
                     .service(get_products_from_list),
+            )
+            .service(
+                web::scope("/auth")
+                    .service(login)
             )
             .default_service(
                 web::resource("/")

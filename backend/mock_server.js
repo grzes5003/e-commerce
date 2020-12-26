@@ -82,7 +82,7 @@ app.get('/', function (req, res) {
     res.send('Hello Sir')
 })
 
-app.post('/users/authenticate', function (req, res) {
+app.post('/auth/login', function (req, res) {
 
     console.log(req.body);
 
@@ -106,7 +106,7 @@ app.post('/users/authenticate', function (req, res) {
         };
 
         console.log("RESP: ", JSON.stringify(responseJson));
-        res.status(200).send({ok: true, text: responseJson});
+        res.status(200).send(responseJson);
     } else {
         // else return error
         res.status(401).send('Username or password is incorrect');

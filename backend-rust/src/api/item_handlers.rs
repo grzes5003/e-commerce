@@ -1,11 +1,8 @@
 use actix_web::{web, Responder, get, HttpResponse};
-use actix_http::{http, Response};
 use crate::model::{Product, Database, CmpName, CmpPrice};
-use std::future::Future;
-use serde::{Serialize, Deserialize};
-use std::borrow::Borrow;
 use actix_web::web::Query;
 use crate::deserializer::deserialize_stringified_list;
+use serde::{Serialize, Deserialize};
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
@@ -36,15 +33,6 @@ struct IdList {
     id: Vec<String>
 }
 
-
-pub async fn not_found() -> impl Responder {
-    HttpResponse::NotFound()
-        .content_type("text/html; charset=utf-8")
-        .body("<h1>Error 404</h1>")
-}
-
-// products
-
 #[get("/product/{prod_id}")]
 pub async fn get_product(db: web::Data<Database>, web::Path(prod_id): web::Path<u32>) -> impl Responder {
     match db.products.get(prod_id as usize) {
@@ -57,7 +45,6 @@ pub async fn get_product(db: web::Data<Database>, web::Path(prod_id): web::Path<
             .body("Product not found")
     }
 }
-
 
 #[get("/products")]
 pub async fn get_filtered_products(db: web::Data<Database>, filter: Query<Filter>) -> impl Responder {
@@ -123,13 +110,6 @@ pub async fn get_products_from_list(db: web::Data<Database>, id_list: Query<IdLi
     }
 }
 
-#[get("/add/to/cart/{prod_id}")]
-pub async fn add_to_cart(db: web::Data<Database>, web::Path(prod_id): web::Path<u32>) -> impl Responder {
-    unimplemented!();
-    HttpResponse::Ok()
-}
-
-// categories
 #[get("/categories")]
 pub async fn get_all_categories(db: web::Data<Database>) -> impl Responder {
     HttpResponse::Ok()

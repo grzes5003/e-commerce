@@ -23,7 +23,7 @@ const HomePage = (props) => {
             <div className='banner'/>
             <div className='container'>
                 <div className='row h-row'>
-                    {user && <h1>Hi {user.text.firstName}!</h1>}
+                    {user && <h1>Hi {user.firstName}!</h1>}
                 </div>
                 <div className='row'>
                     {items.loading && <em>Loading users...</em>}

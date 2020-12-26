@@ -73,7 +73,7 @@ const navbar = props => {
                             </Menu>
                         } position={Position.BOTTOM_LEFT}
                         >
-                            <Button className="bp3-minimal" icon="user" text={user.text.username}/>
+                            <Button className="bp3-minimal" icon="user" text={user.username}/>
                         </Popover>
                         :
                         <Button className="bp3-minimal" icon="log-in" text='Login' onClick={onLoginAction}/>

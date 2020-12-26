@@ -9,7 +9,9 @@ const login = (username, password) => {
         body: JSON.stringify({username, password})
     };
 
-    return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+    const req = `${config.loginServiceUrl}/login`;
+
+    return fetch(req, requestOptions)
         .then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes

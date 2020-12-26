@@ -1,6 +1,6 @@
 import React from "react";
 import {useEffect, useRef} from 'react';
-import {Router, Route} from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {history} from '../_helpers';
@@ -15,6 +15,7 @@ import {Toast, Toaster} from "@blueprintjs/core";
 import {Position} from "@blueprintjs/core/lib/esnext/common/position";
 import {alertConstants, userConstants} from "../_constants";
 import {CartDetailsPage} from "../CartComponents/CartDetailsPage";
+import {NotFound} from "../NotFound"
 
 function App(props) {
 
@@ -57,13 +58,14 @@ function App(props) {
                     }
                     <Toaster position={Position.TOP} ref={toaster}/>
                     <Router history={history}>
-                        <div>
+                        <Switch>
                             <Route exact path="/" component={HomePage}/>
                             <Route path="/login" component={LoginPage}/>
-                        </div>
-                        <Route exact path="/product/:prodId" component={ProductDetailsPage}/>
-                        <Route exact path="/category/:catId" component={CategoryPage}/>
-                        <Route exact path="/cart" component={CartDetailsPage}/>
+                            <Route exact path="/product/:prodId" component={ProductDetailsPage}/>
+                            <Route exact path="/category/:catId" component={CategoryPage}/>
+                            <Route exact path="/cart" component={CartDetailsPage}/>
+                            <Route path="*" component={NotFound}/>
+                        </Switch>
                     </Router>
                 </div>
             </div>
