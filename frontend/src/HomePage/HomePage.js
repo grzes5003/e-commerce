@@ -1,12 +1,8 @@
-import {React, useEffect} from 'react';
-import {Link, Route} from 'react-router-dom';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 
 import {userActions, itemActions} from "../_actions";
-import {CategoryItem, ProductItem} from "../ItemsComponents";
-import {componentConstants} from "../_constants";
-
-import {Button} from "@blueprintjs/core";
+import {CategoryItem} from "../ItemsComponents";
 import {Navbar} from "../LayoutComponents";
 
 
@@ -32,9 +28,8 @@ const HomePage = (props) => {
                 <div className='row'>
                     {items.loading && <em>Loading users...</em>}
                     {items.error && <span className="text-danger">ERROR: {items.error}</span>}
-                    {items.categories && items.categories.ok &&
-
-                    items.categories.categories.map((category, index) =>
+                    {items.categories &&
+                    items.categories.map((category, index) =>
                         <div key={category.id} className='col-md-4'>
                             <div className='categoryItem'>
                                 <CategoryItem category={category}/>

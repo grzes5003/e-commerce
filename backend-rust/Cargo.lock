@@ -351,9 +351,11 @@ name = "backend-rust"
 version = "0.1.0"
 dependencies = [
  "actix-files",
+ "actix-http",
  "actix-web",
  "fake",
  "rand",
+ "serde",
 ]
 
 [[package]]

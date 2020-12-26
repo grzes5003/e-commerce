@@ -84,8 +84,11 @@ const loadCartAfterReload = () => {
         const requestOptions = {
             method: 'GET',
         };
-
-        return fetch(`${config.apiUrl}/products/from/list?id=[` + cart.items.toString() + ']', requestOptions).then(handleResponse);
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            return fetch(`${config.apiUrl}/products/from/list?id=[` + cart.items.toString() + ']', requestOptions).then(handleResponse);
+        } else {
+            return fetch(`${config.apiUrl}/products/filtered?id=` + cart.items.toString(), requestOptions).then(handleResponse);
+        }
     } catch (e) {}
     return Promise.resolve([]);
 }

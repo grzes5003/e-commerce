@@ -130,7 +130,7 @@ app.get('/users', function (req, res) {
 
 app.get('/categories', function (req, res) {
     //console.log("categories/ req: ", req.headers);
-    res.status(200).send({ok: true, categories: categories});
+    res.status(200).send(categories);
 });
 
 app.get('/products/from/list', function (req, res) {
@@ -149,7 +149,7 @@ app.get('/products/from/list', function (req, res) {
         res.status(400).send("bad req");
         return;
     }
-    res.status(200).send({products: findProd});
+    res.status(200).send(findProd);
 });
 
 app.get('/products', function (req, res) {

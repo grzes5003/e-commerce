@@ -87,7 +87,7 @@ const loadCartAfterReload = () => {
         cartService.loadCartAfterReload()
             .then(
                 // TODO reduce redundancy
-                products => { if (products && products.products) dispatch(success(products.products)) }
+                products => dispatch(success(products))
             );
     }
 

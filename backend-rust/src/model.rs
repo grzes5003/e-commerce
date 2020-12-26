@@ -3,8 +3,10 @@ use fake::{Dummy, Fake, Faker};
 use fake::faker::name::en::Name;
 use fake::faker::lorem::en::Words;
 use rand::Rng;
+use serde::Serialize;
+use fake::faker::company::en::Buzzword;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Product {
     pub id: u16,
     pub name: String,
@@ -79,7 +81,7 @@ impl CmpName for Product {
 
 ///// Category
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Category {
     pub id: u8,
     pub name: &'static str,
@@ -96,6 +98,7 @@ impl Category {
 
 //// mock db
 
+#[derive(Clone)]
 pub struct Database {
     pub categories: Vec<Category>,
     pub products: Vec<Product>,
@@ -105,7 +108,7 @@ impl Database {
     pub fn new(num_of_cat: u8, num_of_prod: u16) -> Database {
         let mut rng = rand::thread_rng();
 
-        let cats = (0..num_of_cat).map(|x| Category { id: x, name: "name" }).collect();
+        let cats = (0..num_of_cat).map(|x| Category { id: x, name: Buzzword().fake() }).collect();
         let prod = (0..num_of_prod)
             .map(|x|
                 Product::new_dummy(x, rng.gen_range(0, num_of_cat)))

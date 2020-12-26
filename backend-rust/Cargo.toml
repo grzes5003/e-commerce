@@ -9,6 +9,9 @@ edition = "2018"
 [dependencies]
 actix-web = "3"
 actix-files = "0.4.1"
+actix-http = "2.2.0"
+
+serde = "1.0.118"
 
 fake = "2.2"
 rand = "0.7"
