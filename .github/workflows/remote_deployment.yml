@@ -15,6 +15,13 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            ps -a
             cd e-commerce
-            git pull
+            git fetch
             ls -la
+            cd frontend
+            npm run build
+            cd ../backend-rust
+            cargo build --release
+            cargo run --release
+            ps -a

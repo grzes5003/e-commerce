@@ -43,7 +43,7 @@ async fn index() -> impl Responder {
 }
 
 async fn echo() -> impl Responder {
-    "Hello world!"
+    "It works"
 }
 
 #[actix_web::main]
@@ -81,16 +81,3 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-
-// fn main() {
-//     let prod1: Prod = Prod::new(1,"name3".to_string(), 1.1, "desc1".to_string(), 1);
-//     let prod2: Prod = Prod::new(2,"name2".to_string(), 1.2, "desc2".to_string(), 2);
-//
-//     // println!("compare: {:?}", prod1.cmp(&prod2));
-//     println!("compare: {:?}", <Prod as CmpName>::cmp(&prod1, &prod2));
-//     println!("compare: {:?}", <Prod as CmpPrice>::cmp(&prod1, &prod2));
-//
-//     let db = Database::new(4,10);
-//
-//     println!("element: {:?}", db.products);
-// }
