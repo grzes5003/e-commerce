@@ -77,7 +77,7 @@ async fn main() -> std::io::Result<()> {
                     .route(web::get().to(index)),
             )
     })
-        .bind("192.168.178.86:4040")?
+        .bind("localhost:4040")?
         .run()
         .await
 }
