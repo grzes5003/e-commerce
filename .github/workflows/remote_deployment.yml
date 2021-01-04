@@ -20,6 +20,7 @@ jobs:
             git fetch
             ls -la
             cd frontend
+            npm install
             npm run build
             cd ../backend-rust
             cargo build --release
