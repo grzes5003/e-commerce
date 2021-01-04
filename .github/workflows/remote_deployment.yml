@@ -17,7 +17,7 @@ jobs:
           script: |
             ps -a
             cd e-commerce
-            git fetch
+            git pull
             ls -la
             cd frontend
             npm install
