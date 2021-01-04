@@ -17,9 +17,10 @@ jobs:
           script: |
             ps -a
             cd e-commerce
-            git fetch
+            git pull
             ls -la
             cd frontend
+            npm install
             npm run build
             cd ../backend-rust
             cargo build --release
