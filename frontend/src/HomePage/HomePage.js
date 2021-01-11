@@ -27,11 +27,11 @@ const HomePage = (props) => {
                     <Box>
                         <Center>
                             {user ?
-                                <Heading>
+                                <Heading textShadow="2px 2px teal">
                                     Hi {user.firstName}!
                                 </Heading>
                                 :
-                                <Heading>
+                                <Heading textShadow="2px 2px teal">
                                     SHOP
                                 </Heading>
                             }

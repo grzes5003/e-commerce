@@ -44,6 +44,11 @@ const navbar = props => {
         history.push('/login');
     }
 
+    const onRegisterAction = e => {
+        e.preventDefault();
+        history.push('/register');
+    }
+
     const onHomeAction = (e) => {
         e.preventDefault();
         history.push('/');
@@ -127,7 +132,7 @@ const navbar = props => {
             <Flex>
                 <Center p="3">
                     <div className="navBarLogo" onClick={onHomeAction}>
-                        <Heading size="md">Blueprint</Heading>
+                        <Heading textShadow="2px 2px teal" size="md">BLUEPRINT</Heading>
                     </div>
                 </Center>
 
@@ -186,11 +191,10 @@ const navbar = props => {
                         :
                         <Stack direction="row" spacing={3}>
                             <Box>
-                                <Button onClick={onLoginAction} variant="ghost">Sign in</Button>
+                                <Button onClick={onLoginAction} variant="brutal-outline">Sign in</Button>
                             </Box>
-                            <Center>or</Center>
                             <Box>
-                                <Button onClick={onLoginAction} variant="outline">Sign up</Button>
+                                <Button onClick={onRegisterAction} variant="brutal">Sign up</Button>
                             </Box>
                         </Stack>
                     }

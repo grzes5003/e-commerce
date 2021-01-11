@@ -2,7 +2,7 @@ import React from 'react'
 import {Button, Card} from "@blueprintjs/core";
 import {Elevation} from "@blueprintjs/core/lib/esnext/common/elevation";
 import {Link} from "react-router-dom";
-import { Box, Image, WrapItem} from "@chakra-ui/react"
+import {Box, Image, WrapItem, Flex} from "@chakra-ui/react"
 import {history} from "../_helpers";
 
 const CategoryItem = props => {
@@ -21,46 +21,45 @@ const CategoryItem = props => {
     // )
 
     return (
-        <WrapItem className="navBarLogo" onClick={onCategoryClick} borderWidth="1px" borderRadius="lg" overflow="hidden">
-            <Image objectFit="cover" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png" alt="" />
-            <Box p="6">
-                <Box d="flex" alignItems="baseline">
+        <WrapItem className="navBarLogo" onClick={onCategoryClick} boxShadow="6px 6px teal" borderWidth="1px"
+                  borderColor="teal" borderRadius="sm" overflow="hidden"
+                  _hover={{
+                      // bgGradient: "linear(to-r, red.500, yellow.500)",
+                      transform: "translate(-5px,-5px)",
+                      boxShadow: "11px 11px teal"
+                  }}
+        >
+            <Flex>
+                <Image objectFit="cover"
+                       src="https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png"
+                       alt=""/>
+                <Box p={4}>
+                    <Box d="flex" alignItems="baseline">
+                        <Box
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            ml="2"
+                        >
+                            CATEGORY
+                        </Box>
+                    </Box>
+
                     <Box
-                        color="gray.500"
+                        mt="1"
                         fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        textTransform="uppercase"
-                        ml="2"
+                        as="h3"
+                        lineHeight="tight"
+                        isTruncated
+                        textShadow="1px 1px teal"
                     >
-                        Content uno
+                        {name}
                     </Box>
-                </Box>
 
-                <Box
-                    mt="1"
-                    fontWeight="semibold"
-                    as="h4"
-                    lineHeight="tight"
-                    isTruncated
-                >
-                    {name}
                 </Box>
-
-                <Box>
-                    price
-                    <Box as="span" color="gray.600" fontSize="sm">
-                        / wk
-                    </Box>
-                </Box>
-
-                <Box d="flex" mt="2" alignItems="center">
-                    <Box as="span" ml="2" color="gray.600" fontSize="sm">
-                         reviews
-                    </Box>
-                </Box>
-
-            </Box>
+            </Flex>
         </WrapItem>
     )
 }

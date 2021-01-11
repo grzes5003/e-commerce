@@ -10,7 +10,12 @@ import {
     Center,
     Heading,
     Box,
-    Button
+    Button,
+    VStack,
+    ListItem,
+    Divider,
+    Text,
+    Flex
 } from "@chakra-ui/react"
 
 const CartDetailsPage = (props) => {
@@ -24,27 +29,35 @@ const CartDetailsPage = (props) => {
     return (
         <div className='container'>
             <Heading p={10}>CART</Heading>
-            <Center>
-                { !cart.cart || cart.cart.length === 0 &&
-                    <Box>
-                        <NonIdealState
-                            icon="search"
-                            title="Empty cart"
-                            description="Your cart is empty"
-                            action={
-                                <Button onClick={handleHomeRedirect} colorScheme="teal">Go find new products</Button>
-                            }
-                        />
-                    </Box>
-                }
+            <Divider/>
+            <Center p={10}>
+                {!cart.cart || cart.cart.length === 0 &&
                 <Box>
-                    {cart.cart.map((product, index) =>
-                        <div key={product.id}>
-                            <ProductItem product={product} type={componentConstants.CART_PRODUCT}/>
-                        </div>
-                    )}
+                    <NonIdealState
+                        icon="search"
+                        title="Empty cart"
+                        description="Your cart is empty"
+                        action={
+                            <Button onClick={handleHomeRedirect} colorScheme="teal">Go find new products</Button>
+                        }
+                    />
                 </Box>
+                }
+                <VStack spacing={1}>
+                {cart.cart.map((product, index) =>
+                    <Flex key={product.id}>
+                        <Box w={10}>
+                            <Heading size="md">{index+1}.</Heading>
+                        </Box>
+                        <ProductItem product={product} type={componentConstants.CART_PRODUCT}/>
+                    </Flex>
+                )}
+                </VStack>
             </Center>
+            <Divider/>
+            <Box alignContent="end" w="100%">
+                SUMA
+            </Box>
         </div>
     )
 }

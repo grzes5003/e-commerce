@@ -17,6 +17,7 @@ import {alertConstants, userConstants} from "../_constants";
 import {CartDetailsPage} from "../CartComponents/CartDetailsPage";
 import {NotFound} from "../NotFound"
 import {Navbar} from "../LayoutComponents";
+import {RegisterPage} from "../RegisterPage";
 
 function App(props) {
 
@@ -39,6 +40,7 @@ function App(props) {
                         <Switch>
                             <Route exact path="/" component={HomePage}/>
                             <Route path="/login" component={LoginPage}/>
+                            <Route path="/register" component={RegisterPage}/>
                             <Route exact path="/product/:prodId" component={ProductDetailsPage}/>
                             <Route exact path="/category/:catId" component={CategoryPage}/>
                             <Route exact path="/cart" component={CartDetailsPage}/>

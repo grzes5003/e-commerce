@@ -67,9 +67,9 @@ const LoginPage = (props) => {
 
     return (
         <Center w="100%" p={10}>
-            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+            <Box maxW="sm" borderWidth="1px" borderRadius="sm" boxShadow="6px 6px teal" overflow="hidden">
                 <Stack p={5} spacing={2}>
-                    <Heading>Sign in</Heading>
+                    <Heading textShadow="2px 2px teal">Sign in</Heading>
                     <FormControl id="user" isRequired>
                         <InputGroup size="md">
                             <InputLeftElement
@@ -116,7 +116,7 @@ const LoginPage = (props) => {
                         </InputGroup>
                     </FormControl>
 
-                    <Button onClick={handleSubmit} colorScheme="teal" size="lg" isLoading={loggingIn}>
+                    <Button onClick={handleSubmit} colorScheme="teal" size="lg" isLoading={loggingIn} variant="brutal">
                         Sign in
                     </Button>
                 </Stack>

@@ -41,7 +41,7 @@ const ViewingProperties = (props) => {
 
     const orderMenu = (
         <Menu>
-            <MenuButton as={Button} size="sm" variant="ghost" rightIcon={returnOrderIcon()}>
+            <MenuButton as={Button} size="sm" variant="brutal-ghost" rightIcon={returnOrderIcon()}>
                 Order
             </MenuButton>
             <MenuList>
@@ -63,7 +63,7 @@ const ViewingProperties = (props) => {
 
     const limitMenu = (
         <Menu>
-            <MenuButton as={Button} size="sm" variant="ghost" rightIcon={<FiChevronDown/>}>
+            <MenuButton as={Button} size="sm" variant="brutal-ghost" rightIcon={<FiChevronDown/>}>
                 {getViewFilter.limit}
             </MenuButton>
             <MenuList>
