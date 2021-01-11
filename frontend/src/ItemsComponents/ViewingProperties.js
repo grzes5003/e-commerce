@@ -2,18 +2,16 @@ import React from "react";
 import {connect} from "react-redux";
 import {
     Alignment,
-    Button,
-    Divider,
     FormGroup,
-    Menu,
-    MenuItem,
     Navbar,
     Popover,
     Position
 } from "@blueprintjs/core";
-import {FilterComponent} from "./FilterComponent";
 import {itemConstants} from "../_constants";
-
+import {Flex, Spacer, Box, Menu, MenuButton, MenuList, Button, Divider, MenuItem} from "@chakra-ui/react"
+import {FiChevronDown} from "react-icons/fi";
+import {AiOutlineSortAscending, AiOutlineSortDescending} from "react-icons/ai";
+import {HiSortDescending, HiSortAscending} from "react-icons/hi";
 
 const ViewingProperties = (props) => {
 
@@ -30,54 +28,66 @@ const ViewingProperties = (props) => {
         setViewFilter({...getViewFilter, limit: value});
     }
 
+    const returnOrderIcon = () => {
+        if (getViewFilter.order === itemConstants.AZ_ASC) {
+            return <AiOutlineSortAscending/>;
+        } else if (getViewFilter.order === itemConstants.AZ_DESC) {
+            return <AiOutlineSortDescending/>;
+        } else if (getViewFilter.order === itemConstants.NUM_ASC) {
+            return <HiSortAscending/>;
+        }
+        return <HiSortDescending/>;
+    }
+
     const orderMenu = (
         <Menu>
-            <MenuItem onClick={handleOrderSelect(itemConstants.NUM_DESC)} icon={itemConstants.NUM_DESC}
-                      text='Price Desc'/>
-            <MenuItem onClick={handleOrderSelect(itemConstants.NUM_ASC)} icon={itemConstants.NUM_ASC} text='Price Asc'/>
-            <MenuItem onClick={handleOrderSelect(itemConstants.AZ_ASC)} icon={itemConstants.AZ_ASC} text='Name A-Z'/>
-            <MenuItem onClick={handleOrderSelect(itemConstants.AZ_DESC)} icon={itemConstants.AZ_DESC} text='Name Z-A'/>
+            <MenuButton as={Button} size="sm" variant="brutal-ghost" rightIcon={returnOrderIcon()}>
+                Order
+            </MenuButton>
+            <MenuList>
+                <MenuItem onClick={handleOrderSelect(itemConstants.NUM_DESC)}>
+                    <HiSortDescending/> Price Desc
+                </MenuItem>
+                <MenuItem onClick={handleOrderSelect(itemConstants.NUM_ASC)}>
+                    <HiSortAscending/> Price Asc
+                </MenuItem>
+                <MenuItem onClick={handleOrderSelect(itemConstants.AZ_ASC)}>
+                    <AiOutlineSortAscending/> Name A-Z
+                </MenuItem>
+                <MenuItem onClick={handleOrderSelect(itemConstants.AZ_DESC)}>
+                    <AiOutlineSortDescending/> Name Z-A
+                </MenuItem>
+            </MenuList>
         </Menu>
     );
 
     const limitMenu = (
         <Menu>
-            <MenuItem onClick={handleLimitSelect(20)} text='20'/>
-            <MenuItem onClick={handleLimitSelect(50)} text='50'/>
-            <MenuItem onClick={handleLimitSelect(100)} text='100'/>
+            <MenuButton as={Button} size="sm" variant="brutal-ghost" rightIcon={<FiChevronDown/>}>
+                {getViewFilter.limit}
+            </MenuButton>
+            <MenuList>
+                <MenuItem onClick={handleLimitSelect(20)}>20</MenuItem>
+                <MenuItem onClick={handleLimitSelect(50)}>50</MenuItem>
+                <MenuItem onClick={handleLimitSelect(100)}>100</MenuItem>
+            </MenuList>
         </Menu>
     );
 
     return (
-        <Navbar>
-            <Navbar.Group
-                align={Alignment.LEFT}
-            >
-                <FormGroup
-                    label="Limit:"
-                    labelFor="text-input"
-                    inline='true'
-                >
-                    <Popover content={limitMenu} position={Position.BOTTOM}>
-                        <Button minimal='true' icon='circle' text={getViewFilter.limit}/>
-                    </Popover>
-                </FormGroup>
-            </Navbar.Group>
-            <Navbar.Group
-                align={Alignment.RIGHT}
-            >
-                <FormGroup
-                    label="Order by:"
-                    labelFor="text-input"
-                    inline='true'
-                >
-                    <Popover content={orderMenu} position={Position.BOTTOM}>
-                        <Button minimal='true' icon={getViewFilter.order}/>
-                    </Popover>
-                </FormGroup>
-            </Navbar.Group>
+        <Box p={3}>
             <Divider/>
-        </Navbar>
+            <Flex p={1}>
+                <Box p={1}>
+                    {limitMenu}
+                </Box>
+                <Spacer/>
+                <Box p={1}>
+                    {orderMenu}
+                </Box>
+            </Flex>
+            <Divider/>
+        </Box>
     )
 }
 

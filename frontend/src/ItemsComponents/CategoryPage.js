@@ -8,7 +8,7 @@ import {Navbar} from "../LayoutComponents";
 import {FilterComponent} from "./FilterComponent";
 import {ViewingProperties} from "./ViewingProperties";
 import Pagination from '@material-ui/lab/Pagination';
-
+import {Grid, Box, GridItem, Heading, Center, Text} from "@chakra-ui/react"
 
 const CategoryPage = props => {
     const {catId, items} = props;
@@ -36,35 +36,44 @@ const CategoryPage = props => {
 
     return (
         <div>
-            <Navbar/>
-            <section className='jumbotron text-center'>
-                <div className='container'>
-                    CONTETNS
-                </div>
-            </section>
-            <div className='container'>
-                <div className='row'>
-                    <div className='col-md-4 order-md-1 mb-4'>
+            <Box bgGradient="linear(to-r, teal.500,green.500)" h={250}>
+                <Box className='container' h="100%" pt={100}>
+                    <Heading size="2xl"
+                             // bgGradient="linear(to-r, red.500, yellow.500)"
+                             textShadow="5px 5px teal"
+                    >
+                        CONTENT
+                    </Heading>
+                </Box>
+            </Box>
+            <Box h={50}/>
+            <div className="container">
+                <Grid
+                    templateRows="repeat(1, 1fr)"
+                    templateColumns="repeat(5, 1fr)"
+                    gap={4}
+                >
+                    <GridItem colSpan={1}>
                         <FilterComponent/>
-                    </div>
-                    <div className='col-md-8 order-md-2'>
-                        <div>Hello</div>
+                    </GridItem>
+                    <GridItem colSpan={4}>
+                        {items.products && items.products.numOfResults && <Text>Found {items.products.numOfResults} results</Text>}
                         <div>
                             <ViewingProperties getViewFilter={getViewFilter} setViewFilter={setViewFilter}/>
                         </div>
                         {items.products && items.products.loading && <div>Loading...</div>}
                         {items.products && items.products.products &&
-                        <div>
+                        <Box p={2}>
                             {items.products.products.map((product, index) =>
-                                <div key={product.id}>
+                                <Box key={product.id} p={1}>
                                     <ProductItem product={product} type={componentConstants.CATALOG_PRODUCT}/>
-                                </div>
+                                </Box>
                             )}
-                        </div>
+                        </Box>
                         }
                         <Pagination count={getNumOfPages()} onChange={handlePageChange}/>
-                    </div>
-                </div>
+                    </GridItem>
+                </Grid>
             </div>
         </div>
     )
