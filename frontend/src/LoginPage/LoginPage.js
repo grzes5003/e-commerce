@@ -2,9 +2,24 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {alertActions, userActions} from '../_actions';
 import {useEffect} from 'react'
-import {Navbar} from "../LayoutComponents";
-import {Button, FormGroup, InputGroup, Intent, Toast, Toaster, Tooltip} from "@blueprintjs/core";
+import {Intent, FormGroup, Toast, Toaster, Tooltip} from "@blueprintjs/core";
 import {Position} from "@blueprintjs/core/lib/esnext/common/position";
+import {
+    Grid,
+    Box,
+    GridItem,
+    Stack,
+    Input,
+    FormControl,
+    FormLabel,
+    InputRightElement,
+    Button,
+    InputGroup,
+    Center,
+    InputLeftElement,
+    Heading
+} from "@chakra-ui/react"
+import {FiLock, FiKey, FiUser, FiUnlock} from "react-icons/fi";
 
 const LoginPage = (props) => {
 
@@ -27,6 +42,7 @@ const LoginPage = (props) => {
         const {dispatch} = props;
         if (username && password) {
             dispatch(userActions.login(username, password));
+            setUserData({username: username, password: '', submitted: false});
         }
     }
 
@@ -50,54 +66,62 @@ const LoginPage = (props) => {
     const {username, password, submitted} = userData;
 
     return (
-        <div>
-            <Navbar/>
-            <div className='container'>
-                <div className='loginForm'>
-                    <div className='container'>
-                        <h2 className='bp3-heading'>Login</h2>
-                        <FormGroup
-                            labelFor="text-input"
-                            labelInfo="(required)"
-                            helperText={submitted && !username && 'Username is required'}
-                            intent={submitted && !username ? 'danger':'none'}
-                        >
-                            <InputGroup
-                                leftIcon="user"
-                                id="text-input"
-                                placeholder="Placeholder text"
+        <Center w="100%" p={10}>
+            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                <Stack p={5} spacing={2}>
+                    <Heading>Sign in</Heading>
+                    <FormControl id="user" isRequired>
+                        <InputGroup size="md">
+                            <InputLeftElement
+                                pointerEvents="none"
+                                children={<FiUser color="grey"/>}
+                            />
+                            <Input
+                                pr="4.5rem"
+                                type="text"
+                                placeholder="Enter username"
+                                onChange={handleChange}
                                 name="username"
+                                isInvalid={submitted && !username}
+                                errorBorderColor="crimson"
                                 value={username}
-                                onChange={handleChange}
-                                className={submitted && !username && 'bp3-intent-danger'}
-                                round='true'
                             />
-                        </FormGroup>
-                        <FormGroup
-                            labelFor="text-input"
-                            labelInfo="(required)"
-                            helperText={submitted && !password && 'Password is required'}
-                            intent={submitted && !password ? 'danger':'none'}
-                        >
-                            <InputGroup
-                                placeholder="Enter your password..."
-                                rightElement={lockButton}
-                                leftIcon='key'
+                        </InputGroup>
+                    </FormControl>
+
+                    <FormControl id="password" isRequired>
+                        <InputGroup size="md">
+                            <InputLeftElement
+                                pointerEvents="none"
+                                children={<FiKey color="grey"/>}
+                            />
+                            <Input
+                                pr="4.5rem"
                                 type={showPassword ? "text" : "password"}
-                                name="password"
-                                value={password}
+                                placeholder="Enter password"
                                 onChange={handleChange}
-                                className={submitted && !password && 'bp3-intent-danger'}
-                                round='true'
+                                name="password"
+                                isInvalid={submitted && !password}
+                                errorBorderColor="crimson"
+                                value={password}
                             />
-                        </FormGroup>
-                        <FormGroup>
-                            <Button text="Submit" onClick={handleSubmit} loading={loggingIn} fill='true'/>
-                        </FormGroup>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <InputRightElement width="4.5rem" onClick={handleLockClick}>
+                                {
+                                    showPassword ?
+                                        <FiUnlock color="gold"/>
+                                        :
+                                        <FiLock color="gold"/>
+                                }
+                            </InputRightElement>
+                        </InputGroup>
+                    </FormControl>
+
+                    <Button onClick={handleSubmit} colorScheme="teal" size="lg" isLoading={loggingIn}>
+                        Sign in
+                    </Button>
+                </Stack>
+            </Box>
+        </Center>
     );
 
 };

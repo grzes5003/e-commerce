@@ -13,7 +13,7 @@ const addProdToCart = (product) => {
                     dispatch(success(product));
                     dispatch(alertActions.toast({
                         icon: 'tick-circle',
-                        intent: Intent.SUCCESS,
+                        intent: "success",
                         message: 'Added to cart',
                     }))
                 },
@@ -41,7 +41,7 @@ const removeCartCookie = () => {
                 message =>
                     dispatch(alertActions.toast({
                         icon: 'tick-circle',
-                        intent: Intent.SUCCESS,
+                        intent: "success",
                         message: message,
                     }))
             );
@@ -59,7 +59,7 @@ const removeItemFromCartCookie = prodId => {
                     console.log('REMOVE ITEM THEN: ', message)
                     dispatch(alertActions.toast({
                         icon: 'tick-circle',
-                        intent: Intent.SUCCESS,
+                        intent: "success",
                         message: message,
                     }))
                 },

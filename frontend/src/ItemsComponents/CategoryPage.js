@@ -8,7 +8,7 @@ import {Navbar} from "../LayoutComponents";
 import {FilterComponent} from "./FilterComponent";
 import {ViewingProperties} from "./ViewingProperties";
 import Pagination from '@material-ui/lab/Pagination';
-
+import {Grid, Box, GridItem} from "@chakra-ui/react"
 
 const CategoryPage = props => {
     const {catId, items} = props;
@@ -35,37 +35,38 @@ const CategoryPage = props => {
     }
 
     return (
-        <div>
-            <Navbar/>
-            <section className='jumbotron text-center'>
+        <div className="container">
+            <Box className='jumbotron text-center'>
                 <div className='container'>
                     CONTETNS
                 </div>
-            </section>
-            <div className='container'>
-                <div className='row'>
-                    <div className='col-md-4 order-md-1 mb-4'>
-                        <FilterComponent/>
+            </Box>
+            <Grid
+                templateRows="repeat(1, 1fr)"
+                templateColumns="repeat(5, 1fr)"
+                gap={4}
+            >
+                <GridItem colSpan={1}>
+                    <FilterComponent/>
+                </GridItem>
+                <GridItem colSpan={4}>
+                    <div>Hello</div>
+                    <div>
+                        <ViewingProperties getViewFilter={getViewFilter} setViewFilter={setViewFilter}/>
                     </div>
-                    <div className='col-md-8 order-md-2'>
-                        <div>Hello</div>
-                        <div>
-                            <ViewingProperties getViewFilter={getViewFilter} setViewFilter={setViewFilter}/>
-                        </div>
-                        {items.products && items.products.loading && <div>Loading...</div>}
-                        {items.products && items.products.products &&
-                        <div>
-                            {items.products.products.map((product, index) =>
-                                <div key={product.id}>
-                                    <ProductItem product={product} type={componentConstants.CATALOG_PRODUCT}/>
-                                </div>
-                            )}
-                        </div>
-                        }
-                        <Pagination count={getNumOfPages()} onChange={handlePageChange}/>
+                    {items.products && items.products.loading && <div>Loading...</div>}
+                    {items.products && items.products.products &&
+                    <div>
+                        {items.products.products.map((product, index) =>
+                            <div key={product.id}>
+                                <ProductItem product={product} type={componentConstants.CATALOG_PRODUCT}/>
+                            </div>
+                        )}
                     </div>
-                </div>
-            </div>
+                    }
+                    <Pagination count={getNumOfPages()} onChange={handlePageChange}/>
+                </GridItem>
+            </Grid>
         </div>
     )
 

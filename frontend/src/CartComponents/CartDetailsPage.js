@@ -3,9 +3,15 @@ import {connect} from "react-redux";
 import {Navbar} from "../LayoutComponents";
 import {ProductItem} from "../ItemsComponents";
 import {componentConstants} from "../_constants";
-import {Button, Intent, NonIdealState} from "@blueprintjs/core";
+import {Intent, NonIdealState} from "@blueprintjs/core";
 import {history} from "../_helpers";
 
+import {
+    Center,
+    Heading,
+    Box,
+    Button
+} from "@chakra-ui/react"
 
 const CartDetailsPage = (props) => {
     const {cart} = props;
@@ -16,31 +22,29 @@ const CartDetailsPage = (props) => {
     }
 
     return (
-        <div>
-            <Navbar/>
-            <div className='container'>
-                <h1>CART</h1>
+        <div className='container'>
+            <Heading p={10}>CART</Heading>
+            <Center>
                 { !cart.cart || cart.cart.length === 0 &&
-                    <div>
+                    <Box>
                         <NonIdealState
                             icon="search"
                             title="Empty cart"
                             description="Your cart is empty"
                             action={
-                                <Button onClick={handleHomeRedirect} intent={Intent.SUCCESS}>Go find new
-                                    products</Button>
+                                <Button onClick={handleHomeRedirect} colorScheme="teal">Go find new products</Button>
                             }
                         />
-                    </div>
+                    </Box>
                 }
-                <div>
+                <Box>
                     {cart.cart.map((product, index) =>
                         <div key={product.id}>
                             <ProductItem product={product} type={componentConstants.CART_PRODUCT}/>
                         </div>
                     )}
-                </div>
-            </div>
+                </Box>
+            </Center>
         </div>
     )
 }

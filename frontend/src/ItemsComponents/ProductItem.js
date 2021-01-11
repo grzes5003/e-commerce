@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {componentConstants} from "../_constants";
 import {Button, Card, Intent} from "@blueprintjs/core";
 import {Elevation} from "@blueprintjs/core/lib/esnext/common/elevation";
+import {Box, Image, Flex, SimpleGrid, Spacer, Container} from "@chakra-ui/react"
 
 const ProductItem = props => {
 
@@ -43,7 +44,7 @@ const ProductItem = props => {
             </div>
         )
     }
-    if (type === componentConstants.CATALOG_PRODUCT) {
+    if (type === componentConstants.CATALOG_PRODUCT && false) {
         return (
             <div className='productWrapper'>
                 <Card interactive={true} elevation={Elevation.TWO}>
@@ -62,13 +63,53 @@ const ProductItem = props => {
                                     <h3 className='bp3-heading bp3-text-muted'>{price} $</h3>
                                 </div>
                                 <div className='buttonsWrapper col-sm-6'>
-                                    <Button onClick={handleAddToChart} outlined='true' intent={Intent.SUCCESS}>Add to cart</Button>
+                                    <Button onClick={handleAddToChart} outlined='true' intent={Intent.SUCCESS}>Add to
+                                        cart</Button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Card>
             </div>
+        )
+    }
+
+    if (type === componentConstants.CATALOG_PRODUCT) {
+        return (
+            <Flex borderWidth="1px" borderRadius="lg" overflow="hidden" flexWrap="wrap" flexDirection="row">
+                <Box p={3} maxW={200} minW={100} bg="tomato">
+                    <Image
+                        src="https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png"
+                        alt="Card image cap"/>
+                </Box>
+                <Box maxW={290}>
+                    <Box bg="green.400"
+                         p={6}
+                         fontWeight="semibold"
+                         as="h3"
+                         lineHeight="tight"
+                         isTruncated
+                    >
+                        <Link to={`/product/${id}`}><h3 className='bp3-heading'> {name}</h3></Link>
+                    </Box>
+                    <Container p={2} color="gray.600" h={50} noOfLines={[1,2]}>
+                        There are many benefits to a joint design and development system. Not only
+                        does it bring benefits to the design team.
+                    </Container>
+                </Box>
+                <Spacer/>
+                <SimpleGrid columns={1} bg="red.400" p={6}>
+                    <Box>
+                        <h3 className='bp3-heading bp3-text-muted'>{price} $</h3>
+                    </Box>
+                    <Spacer/>
+                    <Box>
+                        <Button onClick={handleAddToChart} outlined='true' intent={Intent.SUCCESS}>Add to
+                            cart</Button>
+                    </Box>
+                </SimpleGrid>
+
+            </Flex>
         )
     }
 

@@ -16,48 +16,26 @@ import {Position} from "@blueprintjs/core/lib/esnext/common/position";
 import {alertConstants, userConstants} from "../_constants";
 import {CartDetailsPage} from "../CartComponents/CartDetailsPage";
 import {NotFound} from "../NotFound"
+import {Navbar} from "../LayoutComponents";
 
 function App(props) {
 
-    const mounted = useRef();
-    const [getToaster, setToaster] = React.useState();
+    const {dispatch} = props;
 
-    const {alert, toastQueue, dispatch} = props;
-
-    const toaster = useRef(null);
     // const refHandlers = {
     //     toaster: (ref) => toaster = ref,
     // };
 
     useEffect(() => {
         dispatch(cartActions.loadCartAfterReload());
-        history.listen((location, action) => {
-            dispatch(alertActions.clearToasts());
-        })
     }, [])
-
-    useEffect(() => {
-        console.log('print toast did change: ', toastQueue);
-        // do componentDidUpdate logic
-        if (toastQueue) {
-            console.log('print follow up: ', toaster.current);
-            toastQueue.forEach((toast) => {
-                toaster.current.show(toast);
-            });
-            // dispatch(alertActions.clearToasts());
-        }
-
-    }, [toastQueue]);
 
     return (
         <div>
             <div>
                 <div>
-                    {alert.message &&
-                    <div className={`alert ${alert.type}`}>{alert.message}</div>
-                    }
-                    <Toaster position={Position.TOP} ref={toaster}/>
                     <Router history={history}>
+                        <Navbar/>
                         <Switch>
                             <Route exact path="/" component={HomePage}/>
                             <Route path="/login" component={LoginPage}/>
