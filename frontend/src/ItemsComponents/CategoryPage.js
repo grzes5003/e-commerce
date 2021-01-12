@@ -50,8 +50,9 @@ const CategoryPage = props => {
             <div className="container">
                 <Grid
                     templateRows="repeat(1, 1fr)"
-                    templateColumns="repeat(5, 1fr)"
+                    templateColumns={{base: "repeat(1, 1fr)", md: "repeat(5, 1fr)"}}
                     gap={4}
+                    autoFlow={1}
                 >
                     <GridItem colSpan={1}>
                         <FilterComponent/>

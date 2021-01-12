@@ -27,30 +27,41 @@ const generateFakeProducts = () => {
         id: x,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
+        picture: faker.image.business(),
         cat: 0
     }));
     const spodnie = [...Array(quantity.spodnie).keys()].map((x) => ({
         id: x + quantity.buty,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 1
     }));
     const sukienki = [...Array(quantity.sukienki).keys()].map((x) => ({
         id: x + quantity.buty + quantity.spodnie,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 2
     }));
     const inne = [...Array(quantity.inne).keys()].map((x) => ({
         id: x + quantity.buty + quantity.spodnie + quantity.sukienki,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 3
     }));
     const dresy = [...Array(quantity.dresy).keys()].map((x) => ({
         id: x + quantity.buty + quantity.spodnie + quantity.sukienki + quantity.inne,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 4
     }));
 
