@@ -4,7 +4,6 @@ import {itemActions} from "../_actions";
 import {createFilter} from "../_helpers/create-filter";
 import {ProductItem} from "./ProductItem";
 import {componentConstants, itemConstants} from "../_constants";
-import {Navbar} from "../LayoutComponents";
 import {FilterComponent} from "./FilterComponent";
 import {ViewingProperties} from "./ViewingProperties";
 import Pagination from '@material-ui/lab/Pagination';

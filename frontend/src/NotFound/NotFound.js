@@ -1,5 +1,4 @@
 import React from "react";
-import {Navbar} from "../LayoutComponents";
 
 export const NotFound = () => {
     return (

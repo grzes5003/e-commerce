@@ -235,11 +235,14 @@ app.get('/products', function (req, res) {
 app.get('/product/:prodId', function (req, res) {
     const id = req.params.prodId;
     let findProd = products.filter(prod => {
-        return prod.id === id;
+        return prod.id.toString() === id;
     });
 
+    console.log('Found product: ', findProd);
+
     if (findProd.length) {
-        res.status(200).send(findProd);
+        res.status(200).send(findProd[0]);
+        return;
     }
 
     res.status(404).send("Item not found");

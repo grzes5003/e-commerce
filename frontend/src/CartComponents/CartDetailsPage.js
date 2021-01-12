@@ -1,9 +1,8 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Navbar} from "../LayoutComponents";
+import {Navbar, NoResults} from "../LayoutComponents";
 import {ProductItem} from "../ItemsComponents";
 import {componentConstants} from "../_constants";
-import {Intent, NonIdealState} from "@blueprintjs/core";
 import {history} from "../_helpers";
 
 import {
@@ -15,7 +14,8 @@ import {
     ListItem,
     Divider,
     Text,
-    Flex
+    Flex,
+    Spacer
 } from "@chakra-ui/react"
 
 const CartDetailsPage = (props) => {
@@ -26,38 +26,49 @@ const CartDetailsPage = (props) => {
         history.push('/');
     }
 
+    console.log(cart.cart);
+
     return (
         <div className='container'>
             <Heading p={10}>CART</Heading>
             <Divider/>
-            <Center p={10}>
+            <Center p={10} w={{base: "100%", md: "500px", lg: "800px"}}>
                 {!cart.cart || cart.cart.length === 0 &&
                 <Box>
-                    <NonIdealState
-                        icon="search"
-                        title="Empty cart"
-                        description="Your cart is empty"
-                        action={
-                            <Button onClick={handleHomeRedirect} colorScheme="teal">Go find new products</Button>
-                        }
-                    />
+                    <NoResults/>
+                    <Text p={5}>No items in cart</Text>
+                    <Button onClick={handleHomeRedirect} variant="brutal" >Go find new products</Button>
                 </Box>
                 }
-                <VStack spacing={1}>
-                {cart.cart.map((product, index) =>
-                    <Flex key={product.id}>
-                        <Box w={10}>
-                            <Heading size="md">{index+1}.</Heading>
-                        </Box>
-                        <ProductItem product={product} type={componentConstants.CART_PRODUCT}/>
-                    </Flex>
-                )}
+                <VStack spacing={1} w="inherit">
+                    {cart.cart.map((product, index) =>
+                        <Flex key={product.id} w="inherit">
+                            <Box w={10}>
+                                <Heading size="md">{index + 1}.</Heading>
+                            </Box>
+                            <ProductItem product={product} type={componentConstants.CART_PRODUCT}/>
+                        </Flex>
+                    )}
                 </VStack>
             </Center>
-            <Divider/>
-            <Box alignContent="end" w="100%">
-                SUMA
-            </Box>
+            <Divider color="teal.500"/>
+            {cart.cart && cart.cart.length !== 0 &&
+            <Flex>
+                <Heading alignContent="end" w="100%">
+                    <Text color="teal.500">SUM:</Text>
+                    <Text bgGradient="linear(to-r, red.500, yellow.500)"
+                          bgClip="text"
+                          fontWeight="extrabold"
+                    >{cart.cart.reduce((total, obj) => parseFloat(obj.price) + total, 0).toFixed(2)}$</Text>
+
+
+                </Heading>
+                <Spacer/>
+                <Box p={5}>
+                    <Button variant="brutal">ORDER NOW</Button>
+                </Box>
+            </Flex>
+            }
         </div>
     )
 }
