@@ -48,7 +48,7 @@ pub async fn get_product(db: web::Data<Database>, web::Path(prod_id): web::Path<
 
 #[get("/products")]
 pub async fn get_filtered_products(db: web::Data<Database>, filter: Query<Filter>) -> impl Responder {
-    println!("Filter: {:?}", filter);
+    info!("Filter: {:?}", filter);
 
     let cmp_fun = match filter.sort {
         Param::NAME => <Product as CmpName>::cmp,
@@ -87,7 +87,7 @@ pub async fn get_filtered_products(db: web::Data<Database>, filter: Query<Filter
 
 #[get("/products/filtered")]
 pub async fn get_products_from_list(db: web::Data<Database>, id_list: Query<IdList>) -> impl Responder {
-    println!("List: {:?}", id_list);
+    info!("List: {:?}", id_list);
 
     let ids: Result<Vec<_>, _> = id_list.id
         .to_owned()

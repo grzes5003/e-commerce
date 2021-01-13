@@ -25,5 +25,5 @@ jobs:
             npm run build
             cd ../backend-rust
             cargo build --release
-            cargo run --release > rust-log.13-01-2021.log &
-            ps -a
+            ./target/release/backend-rust > rust-log.13-01-2021.log &
+            ps aux | grep g13

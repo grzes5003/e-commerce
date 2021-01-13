@@ -33,7 +33,7 @@ async fn index() -> impl Responder {
                 .body(contents)
         }
         Err(e) => {
-            println!("index.html is not found - {}", e);
+            warn!("index.html is not found - {}", e);
 
             HttpResponse::Ok()
                 .content_type("text/html; charset=utf-8")
