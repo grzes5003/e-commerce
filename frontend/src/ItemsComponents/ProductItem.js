@@ -62,7 +62,7 @@ const ProductItem = props => {
                         <Box bgGradient="linear(to-r, red.500, yellow.500)" boxShadow="3px 3px teal" w="180px" h={1}
                              pos="relative" transform="translate(5px,-10px)" zIndex="-5"/>
                     </Heading>
-                    <Heading size="xs">$ {price}</Heading>
+                    <Heading size="xs">$ {parseFloat(price).toFixed(2)}</Heading>
                 </SimpleGrid>
 
             </Flex>
@@ -102,7 +102,7 @@ const ProductItem = props => {
                              pos="relative" transform="translate(5px,-10px)" zIndex="-5"/>
                     </Heading>
                     <Heading size="md" p={1}>
-                        {price} $
+                        {parseFloat(price).toFixed(2)} $
                     </Heading>
                     <Button onClick={handleRemoveItemFromCart} variant="brutal-outline">Remove from cart</Button>
                 </Box>
@@ -179,7 +179,7 @@ const ProductItem = props => {
                             order={{base: 2, lg: 4}}
                 >
                     <Heading size="md">
-                        {price} $
+                        {parseFloat(price).toFixed(2)} $
                     </Heading>
                     <Spacer/>
                     <Box flex={1}>

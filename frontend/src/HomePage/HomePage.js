@@ -28,7 +28,7 @@ const HomePage = (props) => {
                         <Center>
                             {user ?
                                 <Heading textShadow="2px 2px teal">
-                                    Hi {user.firstName}!
+                                    Hi {user.username}!
                                 </Heading>
                                 :
                                 <Heading textShadow="2px 2px teal">

@@ -28,18 +28,20 @@ const CartDetailsPage = (props) => {
 
     console.log(cart.cart);
 
+    // TODO sum can show NaN sometimes
     return (
         <div className='container'>
             <Heading p={10}>CART</Heading>
             <Divider/>
-            <Center p={10} w={{base: "100%", md: "500px", lg: "800px"}}>
-                {!cart.cart || cart.cart.length === 0 &&
+            {!cart.cart || cart.cart.length === 0 &&
+            <Center p={10}>
                 <Box>
-                    <NoResults/>
-                    <Text p={5}>No items in cart</Text>
-                    <Button onClick={handleHomeRedirect} variant="brutal" >Go find new products</Button>
+                    <NoResults message="No items in cart"/>
+                    <Button onClick={handleHomeRedirect} variant="brutal">Go find new products</Button>
                 </Box>
-                }
+            </Center>
+            }
+            <Center p={10} w={{base: "100%", md: "500px", lg: "inherit"}}>
                 <VStack spacing={1} w="inherit">
                     {cart.cart.map((product, index) =>
                         <Flex key={product.id} w="inherit">

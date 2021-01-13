@@ -68,7 +68,7 @@ const ProductDetailsPage = props => {
                         alignItems="left-line"
                     >
                         <Heading size="lg">
-                            {items.product.price}$
+                            {parseFloat(items.product.price).toFixed(2)}$
                         </Heading>
                         <Box>
                             <Flex flexDirection="row">

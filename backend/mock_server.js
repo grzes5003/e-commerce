@@ -16,11 +16,11 @@ app.use(bodyParser.json());
 
 const generateFakeProducts = () => {
     let quantity = {
-        buty: 100,
-        spodnie: 50,
-        sukienki: 26,
-        inne: 71,
-        dresy: 12
+        buty: 171,
+        spodnie: 122,
+        sukienki: 67,
+        inne: 202,
+        dresy: 81
     }
 
     const buty = [...Array(quantity.buty).keys()].map((x) => ({
@@ -70,7 +70,10 @@ const generateFakeProducts = () => {
 
 const products = generateFakeProducts();
 
-const users = [{id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User'}];
+// const fs = require('fs');
+// fs.writeFileSync('products.json', JSON.stringify(products));
+
+const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com'}];
 const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'}, {
     id: 3,
     name: 'Inne'

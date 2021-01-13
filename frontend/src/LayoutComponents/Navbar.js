@@ -31,6 +31,7 @@ import {
     Center
 } from "@chakra-ui/react"
 import {FiShoppingCart, FiUser} from "react-icons/fi";
+import {NoResults} from "./NoResults";
 
 
 const navbar = props => {
@@ -97,9 +98,9 @@ const navbar = props => {
                                             )}
                                         </VStack>
                                         :
-                                        <div className='emptyCart'>
-                                            Empty cart
-                                        </div>
+                                        <Center>
+                                            <NoResults message="Empty cart" size={80}/>
+                                        </Center>
                                     }
                                 </PopoverBody>
                             </PopoverContent>
@@ -112,7 +113,7 @@ const navbar = props => {
                 <Box p={2}>
                     {(loggedIn && user) ?
                         <Menu>
-                            <MenuButton as={Button} leftIcon={<FiUser/>} variant="ghost">{user.firstName}</MenuButton>
+                            <MenuButton as={Button} leftIcon={<FiUser/>} variant="ghost">{user.username}</MenuButton>
                             <MenuList>
                                 <MenuItem>Profile</MenuItem>
                                 <MenuItem onClick={handleLogoutAction}>Sign out</MenuItem>
