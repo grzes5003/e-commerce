@@ -1,12 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {
-    Alignment,
-    FormGroup,
-    Navbar,
-    Popover,
-    Position
-} from "@blueprintjs/core";
 import {itemConstants} from "../_constants";
 import {Flex, Spacer, Box, Menu, MenuButton, MenuList, Button, Divider, MenuItem} from "@chakra-ui/react"
 import {FiChevronDown} from "react-icons/fi";
