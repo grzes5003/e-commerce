@@ -2,8 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {alertActions, userActions} from '../_actions';
 import {useEffect} from 'react'
-import {Intent, FormGroup, Toast, Toaster, Tooltip} from "@blueprintjs/core";
-import {Position} from "@blueprintjs/core/lib/esnext/common/position";
 import {
     Grid,
     Box,
@@ -50,17 +48,6 @@ const LoginPage = (props) => {
         e.preventDefault();
         setShowPassword(!showPassword);
     }
-
-    const lockButton = (
-        <Tooltip content={`${showPassword ? "Hide" : "Show"} Password`}>
-            <Button
-                icon={showPassword ? "unlock" : "lock"}
-                intent={Intent.WARNING}
-                minimal={true}
-                onClick={handleLockClick}
-            />
-        </Tooltip>
-    );
 
     const {loggingIn} = props;
     const {username, password, submitted} = userData;

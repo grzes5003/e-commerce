@@ -4,16 +4,12 @@ import {Router, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {history} from '../_helpers';
-import {alertActions, cartActions} from '../_actions';
-import {PrivateRoute} from '../_components';
+import {cartActions} from '../_actions';
 import {HomePage} from '../HomePage';
 import {LoginPage} from '../LoginPage';
 import {CategoryItem, CategoryPage, ProductDetailsPage} from "../ItemsComponents";
 
 import '../_styles/index.scss';
-import {Toast, Toaster} from "@blueprintjs/core";
-import {Position} from "@blueprintjs/core/lib/esnext/common/position";
-import {alertConstants, userConstants} from "../_constants";
 import {CartDetailsPage} from "../CartComponents/CartDetailsPage";
 import {NotFound} from "../NotFound"
 import {Navbar} from "../LayoutComponents";
@@ -22,10 +18,6 @@ import {RegisterPage} from "../RegisterPage";
 function App(props) {
 
     const {dispatch} = props;
-
-    // const refHandlers = {
-    //     toaster: (ref) => toaster = ref,
-    // };
 
     useEffect(() => {
         dispatch(cartActions.loadCartAfterReload());
@@ -54,7 +46,6 @@ function App(props) {
 }
 
 function mapStateToProps(state) {
-    console.log("APP state: ", state);
     const {alert} = state;
     const {toastQueue} = alert;
     return {

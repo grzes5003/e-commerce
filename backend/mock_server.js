@@ -16,41 +16,52 @@ app.use(bodyParser.json());
 
 const generateFakeProducts = () => {
     let quantity = {
-        buty: 100,
-        spodnie: 50,
-        sukienki: 26,
-        inne: 71,
-        dresy: 12
+        buty: 171,
+        spodnie: 122,
+        sukienki: 67,
+        inne: 202,
+        dresy: 81
     }
 
     const buty = [...Array(quantity.buty).keys()].map((x) => ({
         id: x,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
+        picture: faker.image.business(),
         cat: 0
     }));
     const spodnie = [...Array(quantity.spodnie).keys()].map((x) => ({
         id: x + quantity.buty,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 1
     }));
     const sukienki = [...Array(quantity.sukienki).keys()].map((x) => ({
         id: x + quantity.buty + quantity.spodnie,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 2
     }));
     const inne = [...Array(quantity.inne).keys()].map((x) => ({
         id: x + quantity.buty + quantity.spodnie + quantity.sukienki,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 3
     }));
     const dresy = [...Array(quantity.dresy).keys()].map((x) => ({
         id: x + quantity.buty + quantity.spodnie + quantity.sukienki + quantity.inne,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
+        description: faker.commerce.productDescription(),
+        brand: faker.company.companyName(0),
         cat: 4
     }));
 
@@ -59,7 +70,10 @@ const generateFakeProducts = () => {
 
 const products = generateFakeProducts();
 
-const users = [{id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User'}];
+// const fs = require('fs');
+// fs.writeFileSync('products.json', JSON.stringify(products));
+
+const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com'}];
 const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'}, {
     id: 3,
     name: 'Inne'
@@ -224,11 +238,14 @@ app.get('/products', function (req, res) {
 app.get('/product/:prodId', function (req, res) {
     const id = req.params.prodId;
     let findProd = products.filter(prod => {
-        return prod.id === id;
+        return prod.id.toString() === id;
     });
 
+    console.log('Found product: ', findProd);
+
     if (findProd.length) {
-        res.status(200).send(findProd);
+        res.status(200).send(findProd[0]);
+        return;
     }
 
     res.status(404).send("Item not found");

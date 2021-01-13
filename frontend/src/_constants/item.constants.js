@@ -20,5 +20,7 @@ export const itemConstants = {
     AZ_ASC: 'sort-alphabetical',
 
     NUM_ASC: 'sort-asc',
-    NUM_DESC: 'sort-desc'
+    NUM_DESC: 'sort-desc',
+
+    FALLBACK_IMG_URL: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png'
 }

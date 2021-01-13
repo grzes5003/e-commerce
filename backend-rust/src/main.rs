@@ -3,6 +3,9 @@ mod api;
 mod deserializer;
 mod auth;
 
+extern crate pretty_env_logger;
+#[macro_use] extern crate log;
+
 use std::io::Read;
 
 use actix_files::Files;
@@ -30,7 +33,7 @@ async fn index() -> impl Responder {
                 .body(contents)
         }
         Err(e) => {
-            println!("index.html is not found - {}", e);
+            warn!("index.html is not found - {}", e);
 
             HttpResponse::Ok()
                 .content_type("text/html; charset=utf-8")
@@ -48,7 +51,14 @@ async fn echo() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db = Database::new(4, 200);
+    pretty_env_logger::init();
+
+    let db = Database::new_from_file("products.json", "categories.json").unwrap_or_else(
+        |e| {
+            error!("When creating fake DB: {}", e);
+            Database::new(4, 200)
+        }
+    );
 
     HttpServer::new(move || {
         App::new()

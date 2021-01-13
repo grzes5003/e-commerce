@@ -2,13 +2,11 @@
   font-family: 'Menlo';
   font-style: normal;
   font-weight: normal;
-  src: local('Menlo'), url('./Menlo-Regular.woff') format('woff');
+  src: local('Menlo'), url('../_resources/fonts/Menlo-Regular.woff') format('woff');
 }
 
 @import "~normalize.css";
 @import "~bootstrap/scss/bootstrap-grid";
-@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
-
 @import "homePage";
 @import "navbar";
 @import "loginPage";

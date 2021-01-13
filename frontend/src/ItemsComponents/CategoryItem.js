@@ -1,9 +1,7 @@
 import React from 'react'
-import {Button, Card} from "@blueprintjs/core";
-import {Elevation} from "@blueprintjs/core/lib/esnext/common/elevation";
-import {Link} from "react-router-dom";
 import {Box, Image, WrapItem, Flex} from "@chakra-ui/react"
 import {history} from "../_helpers";
+import {itemConstants} from "../_constants";
 
 const CategoryItem = props => {
     const {category} = props;
@@ -13,12 +11,6 @@ const CategoryItem = props => {
         e.preventDefault();
         history.push(`/category/${id}`);
     }
-
-    // return (
-    //     <Card interactive={true} elevation={Elevation.TWO}>
-    //         <h5><Link to={`/category/${id}`}>{name}</Link></h5>
-    //     </Card>
-    // )
 
     return (
         <WrapItem className="navBarLogo" onClick={onCategoryClick} boxShadow="6px 6px teal" borderWidth="1px"
@@ -31,8 +23,11 @@ const CategoryItem = props => {
         >
             <Flex>
                 <Image objectFit="cover"
-                       src="https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png"
-                       alt=""/>
+                       src=""
+                       alt=""
+                       fallbackSrc={itemConstants.FALLBACK_IMG_URL}
+                       boxSize="200px"
+                />
                 <Box p={4}>
                     <Box d="flex" alignItems="baseline">
                         <Box

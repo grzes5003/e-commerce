@@ -15,6 +15,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            RUST_LOG=info
             ps -a
             cd e-commerce
             git pull
@@ -24,5 +25,5 @@ jobs:
             npm run build
             cd ../backend-rust
             cargo build --release
-            cargo run --release
-            ps -a
+            ./target/release/backend-rust > rust-log.13-01-2021.log &
+            ps aux | grep g13

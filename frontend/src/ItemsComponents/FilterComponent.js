@@ -1,18 +1,13 @@
 import React from "react";
 import {connect} from "react-redux";
-import {FormGroup, InputGroup} from "@blueprintjs/core";
+import {Box, Input} from "@chakra-ui/react"
 
 
 const FilterComponent = (props) => {
     return (
-        <FormGroup
-            helperText="Helper text with details..."
-            label="Label A"
-            labelFor="text-input"
-            labelInfo="(required)"
-        >
-            <InputGroup id="text-input" placeholder="Placeholder text" />
-        </FormGroup>
+        <Box>
+            <Input/>
+        </Box>
     )
 }
 

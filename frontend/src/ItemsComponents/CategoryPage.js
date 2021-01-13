@@ -4,7 +4,6 @@ import {itemActions} from "../_actions";
 import {createFilter} from "../_helpers/create-filter";
 import {ProductItem} from "./ProductItem";
 import {componentConstants, itemConstants} from "../_constants";
-import {Navbar} from "../LayoutComponents";
 import {FilterComponent} from "./FilterComponent";
 import {ViewingProperties} from "./ViewingProperties";
 import Pagination from '@material-ui/lab/Pagination';
@@ -50,8 +49,9 @@ const CategoryPage = props => {
             <div className="container">
                 <Grid
                     templateRows="repeat(1, 1fr)"
-                    templateColumns="repeat(5, 1fr)"
+                    templateColumns={{base: "repeat(1, 1fr)", md: "repeat(5, 1fr)"}}
                     gap={4}
+                    autoFlow={1}
                 >
                     <GridItem colSpan={1}>
                         <FilterComponent/>

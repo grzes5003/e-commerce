@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 
 import {userActions, itemActions} from "../_actions";
 import {CategoryItem} from "../ItemsComponents";
-import {Navbar} from "../LayoutComponents";
 
 import {Wrap, SimpleGrid, Center, Heading, Box, Container} from "@chakra-ui/react"
+import {Loading} from "../LayoutComponents";
 
 const HomePage = (props) => {
     useEffect(() => {
@@ -28,7 +28,7 @@ const HomePage = (props) => {
                         <Center>
                             {user ?
                                 <Heading textShadow="2px 2px teal">
-                                    Hi {user.firstName}!
+                                    Hi {user.username}!
                                 </Heading>
                                 :
                                 <Heading textShadow="2px 2px teal">
@@ -50,7 +50,7 @@ const HomePage = (props) => {
                     <Box h={50}/>
                 </SimpleGrid>
                 <Wrap justify="center" spacing="40px">
-                    {items.loading && <em>Loading users...</em>}
+                    {items.loading && <Loading/>}
                     {items.error && <span className="text-danger">ERROR: {items.error}</span>}
                     {items.categories &&
                     items.categories.map((category, index) =>
