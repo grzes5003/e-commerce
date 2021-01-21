@@ -10,12 +10,16 @@ jobs:
     steps:
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
+        env:
+          RUST_LOG: info
+          DB_ADDR: ${{ secrets.DB_ADDR }}
+          DB_LOGIN: ${{ secrets.DB_LOGIN }}
+          DB_PASSWD: ${{ secrets.DB_PASSWD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            RUST_LOG=info
             ps -a
             cd e-commerce
             git pull
@@ -25,5 +29,5 @@ jobs:
             npm run build
             cd ../backend-rust
             cargo build --release
-            ./target/release/backend-rust > rust-log.13-01-2021.log &
+            ./target/release/backend-rust > ../../rust-log.13-01-2021.log &
             ps aux | grep g13
