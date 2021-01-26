@@ -7,6 +7,7 @@ extern crate pretty_env_logger;
 extern crate log;
 
 use std::io::Read;
+use std::env;
 
 use actix_files::Files;
 use actix_web::{middleware, web, App, HttpResponse, HttpServer, Responder};
@@ -19,6 +20,7 @@ use crate::api::cart_handlers::add_to_cart;
 use crate::api::item_handlers::{get_all_categories, get_product, get_filtered_products, get_products_from_list};
 use crate::api::user_handlers::login;
 use crate::model::database::Database;
+use std::borrow::Borrow;
 
 async fn index() -> impl Responder {
     match std::fs::File::open("../frontend/build/index.html") {
@@ -50,6 +52,27 @@ async fn echo() -> impl Responder {
     "It works"
 }
 
+fn generate_db(b: bool) -> Box<dyn Database> {
+    match b {
+        false => Box::new(DatabaseMySql::try_new(env::var("DB_URL").unwrap_or_else(
+            |e| {
+                error!("When getting DB url: {}", e);
+                String::from("")
+            })).unwrap_or_else(
+            |e| {
+                error!("When connecting to DB: {}", e);
+                DatabaseMySql::try_new(String::from("")).unwrap()
+            }
+        )),
+        true => Box::new(DatabaseMock::new_from_file("resources/products.json", "resources/categories.json").unwrap_or_else(
+            |e| {
+                error!("When creating fake DB: {}", e);
+                DatabaseMock::new(4, 200)
+            }
+        ))
+    }
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     pretty_env_logger::init();
@@ -60,19 +83,26 @@ async fn main() -> std::io::Result<()> {
 
     // TODO
     //  tmp solution
+    //  because of actix limitations trait type of Database is not arbitrary
 
-    let db = match settings.get_bool("mock").unwrap_or(false) {
-        _ => DatabaseMock::new_from_file("resources/products.json", "resources/categories.json").unwrap_or_else(
+    let db = DatabaseMySql::try_new(env::var("DB_URL").unwrap_or_else(
             |e| {
-                error!("When creating fake DB: {}", e);
-                DatabaseMock::new(4, 200)
-            }
-        )
-    };
+                error!("When getting DB url: {}", e);
+                String::from("")
+            })).unwrap_or_else(
+        |e| {
+            error!("When connecting to DB: {}", e);
+            DatabaseMySql::try_new(String::from("")).unwrap()
+        }
+    );
+
+
+
+    // let db = generate_db(settings.get_bool("mock").unwrap_or(false));
 
     HttpServer::new(move || {
         App::new()
-            .data(Box::new(db.clone()))
+            .data::<Box<dyn Database>>(Box::new(db.clone()))
             .wrap(middleware::Logger::default())
             .wrap(
                 CookieSession::signed(&[0; 32]) // <- create cookie based session middleware

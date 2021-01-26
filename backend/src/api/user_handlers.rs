@@ -20,7 +20,7 @@ struct UserData {
 }
 
 #[post("/login")]
-pub async fn login<'a>(db: web::Data<dyn Database>, login_data: web::Json<LoginData>) -> impl Responder {
+pub async fn login<'a>(db: web::Data<Box<dyn Database>>, login_data: web::Json<LoginData>) -> impl Responder {
     info!("login data {:?}", login_data);
 
     if login_data.username == "test".to_string() && login_data.password == "test".to_string() {
