@@ -24,6 +24,8 @@ pub trait Database {
     fn get_filtered_products(&self, filter: Query<Filter>) -> Res;
     fn get_products_from_list(&self, id_list: Vec<u16>) -> Vec<Product>;
     fn get_all_categories(&self) -> Vec<Category>;
+
+    fn order_from_cart(&self, _items: Vec<String>, _user_id: String) -> Result<(), ()>;
 }
 
 #[derive(Clone)]
@@ -125,6 +127,26 @@ impl Database for DatabaseMySql {
         let result = conn_.query_iter("SELECT id, name FROM categories;").unwrap();
         return result.into_iter().map(|row| Category::from(from_row::<(u8, String)>(row.unwrap()))).collect::<Vec<Category>>();
     }
+
+    fn order_from_cart(&self, _items: Vec<String>, _user_id: u64) -> Result<(), ()> {
+        let mut conn = self.pool.get_conn();
+
+        if let Err(e) = conn {
+            warn!("Cannot get connection to db, {}", e);
+            return Err(());
+        }
+
+        let mut conn_ = conn.unwrap();
+        let res = conn.exec_batch(
+            r"INSERT INTO payment (id, customer, purchase_dtime)
+                    VALUES (:id, :customer, now())",
+            payments.iter().map(|p| params! {
+                "customer_id" => p.customer_id,
+                "amount" => p.amount,
+                "account_name" => &p.account_name,
+            }),
+        )?;
+    }
 }
 
 
@@ -206,5 +228,10 @@ impl Database for DatabaseMock {
 
     fn get_all_categories(&self) -> Vec<Category> {
         self.categories.clone()
+    }
+
+    fn order_from_cart(&self, _items: Vec<String>, _user_id: String) -> Result<(), ()> {
+        unimplemented!();
+        Err(())
     }
 }

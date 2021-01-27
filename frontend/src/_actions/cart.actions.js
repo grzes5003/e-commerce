@@ -99,8 +99,47 @@ const loadCartAfterReload = () => {
     }
 }
 
+const orderFromCart = () => {
+    return dispatch => {
+        dispatch(request())
+
+        cartService.orderFromCart()
+            .then(
+                _ => {
+                    dispatch(success());
+                    dispatch(alertActions.toast({
+                        icon: 'tick-circle',
+                        intent: "success",
+                        message: 'Products ordered',
+                    }))
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.toast({
+                        icon: 'tick-circle',
+                        intent: "error",
+                        message: 'Action failed',
+                    }))
+                }
+            );
+    }
+
+    function request() {
+        return {type: cartConstants.ORDER_PROD_FROM_CART_REQ}
+    }
+
+    function success() {
+        return {type: cartConstants.ORDER_PROD_FROM_CART_SUC}
+    }
+
+    function failure(error) {
+        return {type: cartConstants.ORDER_PROD_FROM_CART_FAIL, error}
+    }
+}
+
 export const cartActions = {
     addProdToCart,
     loadCartAfterReload,
     removeItemFromCartCookie,
+    orderFromCart
 };

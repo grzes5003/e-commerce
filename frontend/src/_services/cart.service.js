@@ -93,10 +93,30 @@ const loadCartAfterReload = () => {
     return Promise.resolve([]);
 }
 
+const orderFromCart = () => {
+    let cart = Cookies.get('cart');
+    try {
+        cart = JSON.parse(cart);
+
+        const requestOptions = {
+            method: 'GET',
+            credentials: 'include'
+        };
+
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            return fetch(`${config.apiUrl}/order/from/list?id=[` + cart.items.toString() + ']', requestOptions).then(handleResponse);
+        } else {
+            return fetch(`${config.apiUrl}/order/list?id=` + cart.items.toString(), requestOptions).then(handleResponse);
+        }
+    } catch (e) {}
+    return Promise.resolve([]);
+}
+
 export const cartService = {
     addProdToCart,
     removeCartCookie,
     addItemToCartCookie,
     loadCartAfterReload,
-    removeItemFromCartCookie
+    removeItemFromCartCookie,
+    orderFromCart
 };

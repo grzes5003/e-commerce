@@ -96,8 +96,6 @@ async fn main() -> std::io::Result<()> {
         }
     );
 
-
-
     // let db = generate_db(settings.get_bool("mock").unwrap_or(false));
 
     HttpServer::new(move || {
@@ -105,7 +103,7 @@ async fn main() -> std::io::Result<()> {
             .data::<Box<dyn Database>>(Box::new(db.clone()))
             .wrap(middleware::Logger::default())
             .wrap(
-                CookieSession::signed(&[0; 32]) // <- create cookie based session middleware
+                CookieSession::signed(&[0; 32])
                     .secure(false)
             )
             .service(Files::new("/static", "../frontend/build/static"))

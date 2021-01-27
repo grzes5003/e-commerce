@@ -1,4 +1,5 @@
 use actix_web::{web, Responder, post, HttpResponse};
+use actix_session::{Session};
 use crate::model::{product::Product, category::Category, database::Database};
 use serde::{Serialize, Deserialize};
 use std::borrow::Borrow;
@@ -20,10 +21,11 @@ struct UserData {
 }
 
 #[post("/login")]
-pub async fn login<'a>(db: web::Data<Box<dyn Database>>, login_data: web::Json<LoginData>) -> impl Responder {
+pub async fn login<'a>(db: web::Data<Box<dyn Database>>, session: Session, login_data: web::Json<LoginData>) -> impl Responder {
     info!("login data {:?}", login_data);
 
     if login_data.username == "test".to_string() && login_data.password == "test".to_string() {
+        session.set("user_id", 1 as u64);
         return HttpResponse::Ok()
             .json(UserData {
                 id: 1,

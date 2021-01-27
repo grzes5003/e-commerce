@@ -57,6 +57,11 @@ const navbar = props => {
         history.push('/cart');
     }
 
+    const handleRedirectProfileAction = (e) => {
+        e.preventDefault();
+        history.push('/profile');
+    };
+
     const handleLogoutAction = () => {
         userActions.logout();
         window.location.reload(false);
@@ -115,7 +120,7 @@ const navbar = props => {
                         <Menu>
                             <MenuButton as={Button} leftIcon={<FiUser/>} variant="ghost">{user.username}</MenuButton>
                             <MenuList>
-                                <MenuItem>Profile</MenuItem>
+                                <MenuItem onClick={handleRedirectProfileAction}>Profile</MenuItem>
                                 <MenuItem onClick={handleLogoutAction}>Sign out</MenuItem>
                             </MenuList>
                         </Menu>

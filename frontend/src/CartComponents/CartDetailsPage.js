@@ -17,16 +17,23 @@ import {
     Flex,
     Spacer
 } from "@chakra-ui/react"
+import {cartActions} from "../_actions";
 
 const CartDetailsPage = (props) => {
-    const {cart} = props;
+    const {cart, loggedIn, dispatch} = props;
 
     const handleHomeRedirect = (e) => {
         e.preventDefault();
         history.push('/');
-    }
+    };
 
-    console.log(cart.cart);
+    const handleOrderNow = e => {
+        e.preventDefault();
+        if (!loggedIn) {
+            history.push('/register');
+        }
+        dispatch(cartActions.orderFromCart());
+    };
 
     // TODO sum can show NaN sometimes
     return (
@@ -67,7 +74,7 @@ const CartDetailsPage = (props) => {
                 </Heading>
                 <Spacer/>
                 <Box p={5}>
-                    <Button variant="brutal">ORDER NOW</Button>
+                    <Button variant="brutal" onClick={handleOrderNow}>ORDER NOW</Button>
                 </Box>
             </Flex>
             }

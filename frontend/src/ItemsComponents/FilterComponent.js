@@ -29,7 +29,6 @@ const FilterComponent = props => {
 
     return (
         <Box>
-            <Input/>
             {items.brands && items.brands.length > 0 &&
             <FormControl>
                 <FormLabel as="legend">Filter Brands</FormLabel>

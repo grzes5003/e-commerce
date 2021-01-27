@@ -82,11 +82,12 @@ const brands = [...Array(15).keys()].map((x) => ({
 // const fs = require('fs');
 // fs.writeFileSync('products.json', JSON.stringify(products));
 
-const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com'}];
+const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com', orders: []}];
 const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'}, {
     id: 3,
     name: 'Inne'
 }, {id: 4, name: 'Dresy'}];
+
 // const products = [
 //     {id: 0, name: "Abibasy", cat: 0, price: 102},
 //     {id: 1, name: "Najki", cat: 0, price: 99},
@@ -128,6 +129,7 @@ app.post('/auth/login', function (req, res) {
             token: 'fake-jwt-token'
         };
 
+        res.cookie('token', 'more-fake-jwt-token', { httpOnly: true });
         console.log("RESP: ", JSON.stringify(responseJson));
         res.status(200).send(responseJson);
     } else {
@@ -149,6 +151,28 @@ app.get('/users', function (req, res) {
         // return 401 not authorised if token is null or invalid
         res.status(401).send('Unauthorised');
     }
+});
+
+app.get('/order/from/list', function (req, res) {
+    let idList = req.query.id;
+    console.log("TOKEN:: ", req.cookie);
+
+    let findProd = [];
+    try {
+        console.log('idlist: ', typeof idList)
+        let ids = JSON.parse(idList);
+        findProd = products.filter(prod => {
+            return Array.isArray(ids) ? ids.includes(prod.id) : prod.id === ids;
+        });
+
+    } catch (e) {
+        console.log('error: ', e);
+        res.status(400).send("bad req");
+        return;
+    }
+
+    console.log("USER ORDERED: ", findProd, " WITH TOKEN " );
+    res.status(200).send(findProd);
 });
 
 app.get('/categories', function (req, res) {
