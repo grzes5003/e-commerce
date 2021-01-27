@@ -1,7 +1,6 @@
 import {cartService, itemService} from "../_services";
 import {cartConstants} from "../_constants";
 import {alertActions} from "./alert.actions";
-import {Intent} from "@blueprintjs/core/lib/esnext/common/intent";
 
 const addProdToCart = (product) => {
     return dispatch => {

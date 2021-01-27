@@ -15,6 +15,10 @@ export const itemConstants = {
     GET_PROD_LIST_SUC: 'PRODUCT_GET_FROM_LIST_SUCCESS',
     GET_PROD_LIST_FAIL: 'PRODUCT_GET_FROM_LIST_FAILURE',
 
+    GET_BRANDS_REQ: 'BRANDS_GET_REQUEST',
+    GET_BRANDS_SUC: 'BRANDS_GET_SUCCESS',
+    GET_BRANDS_FAIL: 'BRANDS_GET_FAILURE',
+
     // items sorting
     AZ_DESC: 'sort-alphabetical-desc',
     AZ_ASC: 'sort-alphabetical',

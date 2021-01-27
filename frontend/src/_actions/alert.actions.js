@@ -1,5 +1,4 @@
 import {alertConstants} from '../_constants';
-import {Intent} from "@blueprintjs/core";
 import { createStandaloneToast } from "@chakra-ui/react"
 
 export const clearToasts = () => ({type: alertConstants.CLEAR_TOASTS});
@@ -22,7 +21,7 @@ function error(message) {
 
     const toastObject = {
         icon: 'error',
-        intent: Intent.DANGER,
+        intent: "Danger",//Intent.DANGER,
         message: message,
     };
     return {type: alertConstants.ENQUEUE_TOAST, toast: toastObject};

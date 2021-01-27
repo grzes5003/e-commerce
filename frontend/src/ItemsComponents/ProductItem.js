@@ -12,6 +12,7 @@ const ProductItem = props => {
 
     const handleAddToChart = (e) => {
         e.preventDefault();
+        console.log("PRODUCT!!!!! ", product, " typeof:", typeof product)
         props.dispatch(cartActions.addProdToCart(product))
     };
 

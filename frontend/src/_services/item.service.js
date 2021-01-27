@@ -53,8 +53,17 @@ const getProdDetails = (prodId) => {
     return fetch(`${config.apiUrl}/product/` + prodId, requestOptions).then(handleResponse)
 }
 
+const getBrandsList = () => {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    return fetch(`${config.apiUrl}/brands`, requestOptions).then(handleResponse)
+}
+
 export const itemService = {
     getAllCategories,
     getProdDetails,
-    getAllFiltered
+    getAllFiltered,
+    getBrandsList
 };

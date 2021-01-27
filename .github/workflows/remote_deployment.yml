@@ -20,6 +20,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            RUST_LOG=info
             ps -a
             cd e-commerce
             git pull

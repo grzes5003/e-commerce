@@ -28,7 +28,7 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
         picture: faker.image.business(),
         cat: 0
     }));
@@ -37,7 +37,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 1
     }));
     const sukienki = [...Array(quantity.sukienki).keys()].map((x) => ({
@@ -45,7 +46,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 2
     }));
     const inne = [...Array(quantity.inne).keys()].map((x) => ({
@@ -53,7 +55,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 3
     }));
     const dresy = [...Array(quantity.dresy).keys()].map((x) => ({
@@ -61,7 +64,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 4
     }));
 
@@ -69,6 +73,11 @@ const generateFakeProducts = () => {
 }
 
 const products = generateFakeProducts();
+
+const brands = [...Array(15).keys()].map((x) => ({
+    id: x,
+    name: faker.company.companyName(0)
+}));
 
 // const fs = require('fs');
 // fs.writeFileSync('products.json', JSON.stringify(products));
@@ -165,6 +174,11 @@ app.get('/products/from/list', function (req, res) {
     }
     res.status(200).send(findProd);
 });
+
+app.get('/brands', function (req, res) {
+    res.status(200).send(brands);
+});
+
 
 app.get('/products', function (req, res) {
     let cats = req.query.cat;

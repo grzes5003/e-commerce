@@ -31,8 +31,10 @@ const ProductDetailsPage = props => {
 
     const handleAddToChart = (e) => {
         e.preventDefault();
-        const {prodId} = props;
-        props.dispatch(cartActions.addProdToCart(prodId))
+        const {items} = props;
+        if (items && items.product) {
+            props.dispatch(cartActions.addProdToCart(items.product));
+        }
     };
 
     const {items} = props;
