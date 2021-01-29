@@ -137,9 +137,42 @@ const orderFromCart = () => {
     }
 }
 
+
+const getAllOrders = () => {
+    return dispatch => {
+        dispatch(request())
+
+        cartService.getAllOrders()
+            .then(
+                orders => dispatch(success(orders)),
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.toast({
+                        icon: 'tick-circle',
+                        intent: "error",
+                        message: 'Unable to get orders',
+                    }))
+                }
+            );
+    }
+
+    function request() {
+        return {type: cartConstants.GET_ALL_ORDERS_REQ}
+    }
+
+    function success(orders) {
+        return {type: cartConstants.GET_ALL_ORDERS_SUC, orders}
+    }
+
+    function failure(error) {
+        return {type: cartConstants.GET_ALL_ORDERS_FAIL, error}
+    }
+}
+
 export const cartActions = {
     addProdToCart,
     loadCartAfterReload,
     removeItemFromCartCookie,
-    orderFromCart
+    orderFromCart,
+    getAllOrders
 };

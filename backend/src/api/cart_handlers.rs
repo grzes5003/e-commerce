@@ -35,3 +35,13 @@ pub async fn order_from_cart(db: web::Data<Box<dyn Database>>, session: Session,
 
     HttpResponse::Unauthorized().body("You must login first")
 }
+
+#[get("/orders/all")]
+pub async fn get_all_orders(db: web::Data<Box<dyn Database>>, session: Session) -> impl Responder {
+
+    if let Some(user_id) = session.get::<u64>("user_id")? {
+        db.get_all_orders(user_id)
+    }
+
+    HttpResponse::Unauthorized().body("You must login first")
+}

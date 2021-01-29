@@ -17,7 +17,7 @@ import {
     Flex,
     Spacer
 } from "@chakra-ui/react"
-import {cartActions} from "../_actions";
+import {alertActions, cartActions} from "../_actions";
 
 const CartDetailsPage = (props) => {
     const {cart, loggedIn, dispatch} = props;
@@ -31,8 +31,10 @@ const CartDetailsPage = (props) => {
         e.preventDefault();
         if (!loggedIn) {
             history.push('/register');
+            dispatch(alertActions.error("You must be logged in"));
+        } else {
+            dispatch(cartActions.orderFromCart());
         }
-        dispatch(cartActions.orderFromCart());
     };
 
     // TODO sum can show NaN sometimes

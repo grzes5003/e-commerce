@@ -5,7 +5,7 @@ use fake::{Dummy, Fake, Faker};
 use serde::{Serialize, Deserialize};
 use mysql::{Pool, Error, params, Row, from_row, from_value, Value};
 
-use crate::model::{product::Product, category::Category, cmp::{CmpPrice, CmpName}, filter::{Filter, Order, Param}};
+use crate::model::{product::Product, category::Category, order::Order as Order_details, cmp::{CmpPrice, CmpName}, filter::{Filter, Order, Param}};
 
 use std::env;
 use std::fs;
@@ -24,6 +24,7 @@ pub trait Database {
     fn get_filtered_products(&self, filter: Query<Filter>) -> Res;
     fn get_products_from_list(&self, id_list: Vec<u16>) -> Vec<Product>;
     fn get_all_categories(&self) -> Vec<Category>;
+    fn get_all_orders(&self, user_id: u64) -> Vec<Order_details>;
 
     fn order_from_cart(&self, _items: Vec<String>, _user_id: String) -> Result<(), ()>;
 }
@@ -128,6 +129,33 @@ impl Database for DatabaseMySql {
         return result.into_iter().map(|row| Category::from(from_row::<(u8, String)>(row.unwrap()))).collect::<Vec<Category>>();
     }
 
+    fn get_all_orders(&self, user_id: u64) -> Vec<Order_details> {
+        let mut conn = self.pool.get_conn();
+
+        if let Err(e) = conn {
+            warn!("Cannot get connection to db, {}", e);
+            return Vec::new();
+        }
+
+        let mut conn_ = conn.unwrap();
+
+        let mut orders: Order_details;
+
+        // TODO finnish that stuff
+        let select_orders = conn_.prep("SELECT id, `desc`, purchase_dtime FROM orders WHERE customer=:user_id;").unwrap();
+        let user_orders = conn_.exec_iter(&select_orders, params! {user_id}).unwrap();
+
+        for order in user_orders.into_iter() {
+            let order_ = order.unwrap();
+            let id = &order_[0];
+
+            let select_orders_details = conn_.prep("SELECT id, `desc`, purchase_dtime FROM orders WHERE customer=:user_id;").unwrap();
+        }
+
+        let products = result[4].into_iter().map(|row| Product::from(from_row::<(u16, String, f32, u8, String, String, String, u32)>(row.unwrap()))).collect::<Vec<Product>>();
+        return result.into_iter().map(|row| Order_details::from(from_row::<(u8, String, String, f32, Vec<Product>)>(row.unwrap()))).collect::<Vec<Order_details>>();
+    }
+
     fn order_from_cart(&self, _items: Vec<String>, _user_id: u64) -> Result<(), ()> {
         let mut conn = self.pool.get_conn();
 
@@ -228,6 +256,11 @@ impl Database for DatabaseMock {
 
     fn get_all_categories(&self) -> Vec<Category> {
         self.categories.clone()
+    }
+
+    fn get_all_orders(&self, user_id: u64) -> Vec<Order_details> {
+        unimplemented!();
+        vec![]
     }
 
     fn order_from_cart(&self, _items: Vec<String>, _user_id: String) -> Result<(), ()> {

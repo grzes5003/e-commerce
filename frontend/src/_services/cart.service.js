@@ -112,11 +112,21 @@ const orderFromCart = () => {
     return Promise.resolve([]);
 }
 
+const getAllOrders = () => {
+    const requestOptions = {
+        method: 'GET',
+        credentials: 'include'
+    };
+
+    return fetch(`${config.apiUrl}/orders/all`, requestOptions).then(handleResponse)
+}
+
 export const cartService = {
     addProdToCart,
     removeCartCookie,
     addItemToCartCookie,
     loadCartAfterReload,
     removeItemFromCartCookie,
-    orderFromCart
+    orderFromCart,
+    getAllOrders
 };

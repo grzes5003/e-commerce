@@ -79,14 +79,14 @@ const brands = [...Array(15).keys()].map((x) => ({
     name: faker.company.companyName(0)
 }));
 
+const orders = [{user: "test",desc: 'order uno',purchase_dtime: '1000-01-01 00:00:00', products: [products[1], products[10], products[20], products[30], products[40]]}];
+
 // const fs = require('fs');
 // fs.writeFileSync('products.json', JSON.stringify(products));
 
 const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com', orders: []}];
-const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'}, {
-    id: 3,
-    name: 'Inne'
-}, {id: 4, name: 'Dresy'}];
+const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'},
+    {id: 3, name: 'Inne'}, {id: 4, name: 'Dresy'}];
 
 // const products = [
 //     {id: 0, name: "Abibasy", cat: 0, price: 102},
@@ -104,6 +104,10 @@ const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, nam
 
 app.get('/', function (req, res) {
     res.send('Hello Sir')
+})
+
+app.get('/orders/all', function (req, res) {
+    res.send([orders[0]]);
 })
 
 app.post('/auth/login', function (req, res) {
@@ -129,7 +133,7 @@ app.post('/auth/login', function (req, res) {
             token: 'fake-jwt-token'
         };
 
-        res.cookie('token', 'more-fake-jwt-token', { httpOnly: true });
+        res.cookie('token', 'more-fake-jwt-token', {httpOnly: true});
         console.log("RESP: ", JSON.stringify(responseJson));
         res.status(200).send(responseJson);
     } else {
@@ -171,7 +175,7 @@ app.get('/order/from/list', function (req, res) {
         return;
     }
 
-    console.log("USER ORDERED: ", findProd, " WITH TOKEN " );
+    console.log("USER ORDERED: ", findProd, " WITH TOKEN ");
     res.status(200).send(findProd);
 });
 
