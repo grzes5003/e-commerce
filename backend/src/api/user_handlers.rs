@@ -1,4 +1,4 @@
-use actix_web::{web, Responder, post, HttpResponse};
+use actix_web::{web, Responder, post, get, HttpResponse};
 use actix_session::{Session};
 use crate::model::{product::Product, category::Category, database::Database};
 use serde::{Serialize, Deserialize};
@@ -38,4 +38,17 @@ pub async fn login<'a>(db: web::Data<Box<dyn Database>>, session: Session, login
 
     HttpResponse::Forbidden()
         .body("Bad login or password")
+}
+
+
+#[get("/logout")]
+pub async fn logout(db: web::Data<Box<dyn Database>>, session: Session) -> impl Responder {
+    info!("logout action");
+
+    if let Ok(Some(user_id)) = session.get::<u64>("user_id") {
+        session.purge();
+        return HttpResponse::Ok()
+    }
+
+    HttpResponse::Forbidden()
 }

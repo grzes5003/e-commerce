@@ -10,7 +10,8 @@ use crate::model::{product::Product, category::Category, order::Order as Order_d
 use std::env;
 use std::fs;
 use std::io;
-use mysql::prelude::{Queryable, FromValue, FromRow};
+use mysql::prelude::{Queryable, FromValue, FromRow, ToValue};
+use mysql::time::Date;
 
 #[derive(Serialize)]
 pub struct Res {
@@ -26,7 +27,7 @@ pub trait Database {
     fn get_all_categories(&self) -> Vec<Category>;
     fn get_all_orders(&self, user_id: u64) -> Vec<Order_details>;
 
-    fn order_from_cart(&self, _items: Vec<String>, _user_id: String) -> Result<(), ()>;
+    fn order_from_cart(&self, _items: Vec<u16>, _user_id: u64) -> Result<(), ()>;
 }
 
 #[derive(Clone)]
@@ -113,7 +114,29 @@ impl Database for DatabaseMySql {
     }
 
     fn get_products_from_list(&self, id_list: Vec<u16>) -> Vec<Product> {
-        unimplemented!();
+        let mut conn = self.pool.get_conn();
+
+        if let Err(e) = conn {
+            warn!("Cannot get connection to db, {}", e);
+            return vec![];
+        }
+
+        let s_list = format!("{:?}", id_list).chars().skip(1).take_while(|c| *c != ']').collect::<String>();
+        let mut conn_ = conn.unwrap();
+        let result = conn_.query_iter(
+            format!("SELECT ps.id,
+                    ps.name,
+                    price,
+                    category,
+                    (SELECT br.name FROM brands br WHERE br.id = brand) as brand,
+                    description,
+                    picture,
+                    units_in_stock
+                FROM products ps
+                WHERE ps.id IN ({})", s_list)).unwrap();
+        let products =
+            result.into_iter().map(|row| Product::from(from_row::<(u16, String, f32, u8, String, String, String, u32)>(row.unwrap()))).collect::<Vec<Product>>();
+        products
     }
 
     fn get_all_categories(&self) -> Vec<Category> {
@@ -131,6 +154,7 @@ impl Database for DatabaseMySql {
 
     fn get_all_orders(&self, user_id: u64) -> Vec<Order_details> {
         let mut conn = self.pool.get_conn();
+        let mut conn2 = self.pool.get_conn();
 
         if let Err(e) = conn {
             warn!("Cannot get connection to db, {}", e);
@@ -138,26 +162,57 @@ impl Database for DatabaseMySql {
         }
 
         let mut conn_ = conn.unwrap();
+        let mut conn2_ = conn2.unwrap();
 
-        let mut orders: Order_details;
+        let mut orders: Vec<Order_details> = vec![];
+
+        info!("user_id = {:?}", user_id);
 
         // TODO finnish that stuff
-        let select_orders = conn_.prep("SELECT id, `desc`, purchase_dtime FROM orders WHERE customer=:user_id;").unwrap();
+        let select_orders = conn_.prep("SELECT id, COALESCE(`desc`,'') as `desc`, purchase_dtime FROM orders WHERE customer=:user_id;").unwrap();
         let user_orders = conn_.exec_iter(&select_orders, params! {user_id}).unwrap();
 
         for order in user_orders.into_iter() {
             let order_ = order.unwrap();
-            let id = &order_[0];
+            let order_id = &order_[0];
 
-            let select_orders_details = conn_.prep("SELECT id, `desc`, purchase_dtime FROM orders WHERE customer=:user_id;").unwrap();
+            info!("order_id = {:?}", order_id);
+
+            let select_orders_details = conn2_.prep(
+                "SELECT id,
+                              name,
+                              price,
+                              category,
+                              (SELECT br.name FROM brands br WHERE br.id = brand) as brand,
+                              description,
+                              picture,
+                              units_in_stock
+                       FROM products p
+                       WHERE p.id = ANY (SELECT product FROM orderdetails o WHERE o.order = :order_id);")
+                .unwrap();
+            let order_products = conn2_.exec_iter(&select_orders_details, params! {"order_id" => order_id}).unwrap();
+
+            let products =
+                order_products.into_iter().map(|row| Product::from(from_row::<(u16, String, f32, u8, String, String, String, u32)>(row.unwrap()))).collect::<Vec<Product>>();
+
+            info!("products: {:?}", products);
+
+            info!("order: {:?}", order_);
+
+            orders.push(Order_details {
+                id: from_value::<u8>(order_id.clone()),
+                desc: from_value::<String>(order_[1].clone()),
+                purchase_dtime: from_value::<Date>(order_[2].clone()).lazy_format("%Y-%m-%d").to_string(),
+                price: 0.0,
+                products,
+            })
         }
-
-        let products = result[4].into_iter().map(|row| Product::from(from_row::<(u16, String, f32, u8, String, String, String, u32)>(row.unwrap()))).collect::<Vec<Product>>();
-        return result.into_iter().map(|row| Order_details::from(from_row::<(u8, String, String, f32, Vec<Product>)>(row.unwrap()))).collect::<Vec<Order_details>>();
+        orders
     }
 
-    fn order_from_cart(&self, _items: Vec<String>, _user_id: u64) -> Result<(), ()> {
+    fn order_from_cart(&self, _items: Vec<u16>, _user_id: u64) -> Result<(), ()> {
         let mut conn = self.pool.get_conn();
+        info!("Order from cart");
 
         if let Err(e) = conn {
             warn!("Cannot get connection to db, {}", e);
@@ -165,15 +220,21 @@ impl Database for DatabaseMySql {
         }
 
         let mut conn_ = conn.unwrap();
-        let res = conn.exec_batch(
-            r"INSERT INTO payment (id, customer, purchase_dtime)
-                    VALUES (:id, :customer, now())",
-            payments.iter().map(|p| params! {
-                "customer_id" => p.customer_id,
-                "amount" => p.amount,
-                "account_name" => &p.account_name,
-            }),
-        )?;
+        conn_.query_drop(
+            format!("INSERT INTO orders
+                        (customer, purchase_dtime)
+                    VALUES ({}, now());", _user_id));
+        info!("Created new order");
+        let last_row_id: Option<u64> = conn_.query_first("SELECT LAST_INSERT_ID();").unwrap().unwrap();
+        info!("Order ID {:?}", last_row_id);
+        let res = conn_.exec_batch(
+            r"INSERT INTO orderdetails (`order`, product, price)
+                        VALUES (:order_id, :item_id, (SELECT price from products WHERE id = :item_id))",
+            _items.iter().map(|item_id| params! {
+                    "order_id" => last_row_id,
+                    "item_id" => item_id,
+                }), );
+        match res {Ok(_) => Ok(()), Err(e) => {warn!("{:?}", e); Err(())}}
     }
 }
 
@@ -263,7 +324,7 @@ impl Database for DatabaseMock {
         vec![]
     }
 
-    fn order_from_cart(&self, _items: Vec<String>, _user_id: String) -> Result<(), ()> {
+    fn order_from_cart(&self, _items: Vec<u16>, _user_id: u64) -> Result<(), ()> {
         unimplemented!();
         Err(())
     }

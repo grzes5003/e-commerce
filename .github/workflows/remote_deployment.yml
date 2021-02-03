@@ -12,9 +12,7 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           RUST_LOG: info
-          DB_ADDR: ${{ secrets.DB_ADDR }}
-          DB_LOGIN: ${{ secrets.DB_LOGIN }}
-          DB_PASSWD: ${{ secrets.DB_PASSWD }}
+          DB_URL: ${{ secrets.DB_URL }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -30,5 +28,5 @@ jobs:
             npm run build
             cd ../backend-rust
             cargo build --release
-            ./target/release/backend-rust > ../../rust-log.13-01-2021.log &
+            ./target/release/backend-rust > ../../rust-log.03-02-2021.log &
             ps aux | grep g13

@@ -1,6 +1,7 @@
 import {cartService, itemService} from "../_services";
 import {cartConstants} from "../_constants";
 import {alertActions} from "./alert.actions";
+import Cookies from "js-cookie";
 
 const addProdToCart = (product) => {
     return dispatch => {
@@ -129,6 +130,7 @@ const orderFromCart = () => {
     }
 
     function success() {
+        Cookies.remove('cart');
         return {type: cartConstants.ORDER_PROD_FROM_CART_SUC}
     }
 

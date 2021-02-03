@@ -24,8 +24,15 @@ const login = (username, password) => {
 };
 
 const logout = () => {
+    const requestOptions = {
+        method: 'GET',
+        credentials: 'include',
+    };
     console.log("logout action!");
+
     localStorage.removeItem('user');
+
+    return fetch(`${config.loginServiceUrl}/logout`, requestOptions).then(handleResponse);
 };
 
 const getAll = () => {

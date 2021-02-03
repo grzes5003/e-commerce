@@ -5,9 +5,9 @@ use crate::model::deserializer::deserialize_stringified_list;
 use serde::{Serialize, Deserialize};
 
 #[derive(Deserialize, Debug)]
-struct IdList {
+pub struct IdList {
     #[serde(deserialize_with = "deserialize_stringified_list")]
-    id: Vec<String>
+    pub id: Vec<String>
 }
 
 #[get("/product/{prod_id}")]
