@@ -23,6 +23,29 @@ const login = (username, password) => {
         });
 };
 
+const register = (username, password, email) => {
+
+    const user_data = {
+        nickname: username,
+        surname: username,
+        email: email,
+        passwd: password
+    }
+
+    const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify(user_data)
+    };
+
+    const req = `${config.loginServiceUrl}/register`;
+
+    return fetch(req, requestOptions)
+        .then(handleResponse)
+        .then();
+};
+
 const logout = () => {
     const requestOptions = {
         method: 'GET',
@@ -79,5 +102,6 @@ function handleResponse(response) {
 export const userService = {
     login,
     logout,
+    register,
     getAll
 };

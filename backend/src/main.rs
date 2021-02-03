@@ -17,8 +17,8 @@ use std::iter::Product;
 use model::{product::Product as Prod, database::{DatabaseMock, DatabaseMySql}};
 use crate::model::cmp::{CmpName, CmpPrice};
 use crate::api::cart_handlers::{add_to_cart, get_all_orders, order_from_cart};
-use crate::api::item_handlers::{get_all_categories, get_product, get_filtered_products, get_products_from_list};
-use crate::api::user_handlers::{login, logout};
+use crate::api::item_handlers::{get_all_categories, get_product, get_filtered_products, get_products_from_list, get_all_brands};
+use crate::api::user_handlers::{login, logout, register};
 use crate::model::database::Database;
 use std::borrow::Borrow;
 
@@ -116,11 +116,13 @@ async fn main() -> std::io::Result<()> {
                     .service(get_filtered_products)
                     .service(get_products_from_list)
                     .service(get_all_orders)
-                    .service(order_from_cart),
+                    .service(order_from_cart)
+                    .service(get_all_brands),
             )
             .service(
                 web::scope("/auth")
                     .service(login)
+                    .service(register)
                     .service(logout)
             )
             .default_service(

@@ -35,6 +35,38 @@ const login = (username, password) => {
 };
 
 
+const register = (username, password, email) => {
+    return dispatch => {
+        dispatch(request());
+
+        userService.register(username, password, email)
+            .then(
+                _ => {
+                    dispatch(success());
+                    dispatch(alertActions.success("Register successful"));
+                    history.push('/');
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            )
+    };
+
+    function request() {
+        return {type: userConstants.REGISTER_REQUEST}
+    }
+
+    function success() {
+        return {type: userConstants.REGISTER_SUCCESS}
+    }
+
+    function failure(error) {
+        console.log("ERROR REGISTER: error=", error);
+        return {type: userConstants.REGISTER_FAILURE, error}
+    }
+};
+
 const logout = () => {
     userService.logout();
     return {type: userConstants.LOGOUT};
@@ -70,5 +102,6 @@ const getAll = () => {
 export const userActions = {
     login,
     logout,
+    register,
     getAll
 };

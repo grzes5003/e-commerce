@@ -28,10 +28,10 @@ const RegisterPage = props => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setUserData({...userData, submitted: true});
-        const {username, password} = userData;
+        const {username, password, email} = userData;
         const {dispatch} = props;
         if (username && password) {
-            // dispatch(userActions.login(username, password));
+            dispatch(userActions.register(username, password, email));
         }
     }
 
@@ -56,7 +56,7 @@ const RegisterPage = props => {
                                 placeholder="Enter email"
                                 onChange={handleChange}
                                 name="email"
-                                isInvalid={submitted && !email}
+                                isInvalid={submitted && (!email || email.length > 45 )}
                                 errorBorderColor="crimson"
                                 value={email}
                             />
@@ -77,7 +77,7 @@ const RegisterPage = props => {
                                 placeholder="Enter username"
                                 onChange={handleChange}
                                 name="username"
-                                isInvalid={submitted && !username}
+                                isInvalid={submitted && (!username || username.length > 45)}
                                 errorBorderColor="crimson"
                                 value={username}
                             />
