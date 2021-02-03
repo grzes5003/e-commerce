@@ -1,0 +1,22 @@
+[
+  {
+    "id": 0,
+    "name": "Shoes"
+  },
+  {
+    "id": 1,
+    "name": "Trousers"
+  },
+  {
+    "id": 2,
+    "name": "Dresses"
+  },
+  {
+    "id": 3,
+    "name": "Other"
+  },
+  {
+    "id": 4,
+    "name": "Sport"
+  }
+]

@@ -1,0 +1,27 @@
+[package]
+name = "backend"
+version = "0.1.0"
+authors = ["grzes5003 <grzes.kulinski@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "3"
+actix-files = "0.4.1"
+actix-http = "2.2.0"
+actix-web-httpauth = "0.5.0"
+actix-cors = "0.5.3"
+actix-session = "0.4.0"
+
+mysql = "*"
+
+serde = "1.0.118"
+serde_json = "1.0.61"
+
+fake = "2.2"
+rand = "0.7"
+
+log = "0.4"
+pretty_env_logger = "0.4.0"
+config = "0.10"

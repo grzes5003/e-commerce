@@ -14,10 +14,12 @@ import {CartDetailsPage} from "../CartComponents/CartDetailsPage";
 import {NotFound} from "../NotFound"
 import {Navbar} from "../LayoutComponents";
 import {RegisterPage} from "../RegisterPage";
+import {ProfilePage, OrdersPage} from "../ProfileComponent";
+
 
 function App(props) {
 
-    const {dispatch} = props;
+    const {dispatch, authentication} = props;
 
     useEffect(() => {
         dispatch(cartActions.loadCartAfterReload());
@@ -36,6 +38,8 @@ function App(props) {
                             <Route exact path="/product/:prodId" component={ProductDetailsPage}/>
                             <Route exact path="/category/:catId" component={CategoryPage}/>
                             <Route exact path="/cart" component={CartDetailsPage}/>
+                            {authentication && authentication.loggedIn && <Route exact path="/profile" component={ProfilePage}/>}
+                            {authentication && authentication.loggedIn && <Route exact path="/p/orders" component={OrdersPage}/>}
                             <Route path="*" component={NotFound}/>
                         </Switch>
                     </Router>
@@ -46,11 +50,12 @@ function App(props) {
 }
 
 function mapStateToProps(state) {
-    const {alert} = state;
+    const {alert, authentication} = state;
     const {toastQueue} = alert;
     return {
         alert,
-        toastQueue
+        toastQueue,
+        authentication
     };
 }
 

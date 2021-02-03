@@ -73,8 +73,33 @@ const getProdDetails = (prodId) => {
     }
 }
 
+const getBrands = () => {
+    return dispatch => {
+        dispatch(request())
+
+        itemService.getBrandsList()
+            .then(
+                product => dispatch(success(product)),
+                error => dispatch(failure(error))
+            );
+    }
+
+    function request() {
+        return {type: itemConstants.GET_BRANDS_REQ}
+    }
+
+    function success(brands) {
+        return {type: itemConstants.GET_BRANDS_SUC, brands}
+    }
+
+    function failure(error) {
+        return {type: itemConstants.GET_BRANDS_FAIL, error}
+    }
+}
+
 export const itemActions = {
     getAllCategories,
     getProdDetails,
-    getAllFiltered
+    getAllFiltered,
+    getBrands
 };

@@ -28,7 +28,7 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
         picture: faker.image.business(),
         cat: 0
     }));
@@ -37,7 +37,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 1
     }));
     const sukienki = [...Array(quantity.sukienki).keys()].map((x) => ({
@@ -45,7 +46,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 2
     }));
     const inne = [...Array(quantity.inne).keys()].map((x) => ({
@@ -53,7 +55,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 3
     }));
     const dresy = [...Array(quantity.dresy).keys()].map((x) => ({
@@ -61,7 +64,8 @@ const generateFakeProducts = () => {
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         description: faker.commerce.productDescription(),
-        brand: faker.company.companyName(0),
+        brand: Math.floor(Math.random() * (15)),
+        picture: faker.image.business(),
         cat: 4
     }));
 
@@ -70,14 +74,20 @@ const generateFakeProducts = () => {
 
 const products = generateFakeProducts();
 
+const brands = [...Array(15).keys()].map((x) => ({
+    id: x,
+    name: faker.company.companyName(0)
+}));
+
+const orders = [{user: "test",desc: 'order uno',purchase_dtime: '1000-01-01 00:00:00', products: [products[1], products[10], products[20], products[30], products[40]]}];
+
 // const fs = require('fs');
 // fs.writeFileSync('products.json', JSON.stringify(products));
 
-const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com'}];
-const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'}, {
-    id: 3,
-    name: 'Inne'
-}, {id: 4, name: 'Dresy'}];
+const users = [{id: 1, username: 'test', password: 'test', email: 'text@example.com', orders: []}];
+const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, name: 'Sukienki'},
+    {id: 3, name: 'Inne'}, {id: 4, name: 'Dresy'}];
+
 // const products = [
 //     {id: 0, name: "Abibasy", cat: 0, price: 102},
 //     {id: 1, name: "Najki", cat: 0, price: 99},
@@ -94,6 +104,10 @@ const categories = [{id: 0, name: 'Buty'}, {id: 1, name: 'Spodnie'}, {id: 2, nam
 
 app.get('/', function (req, res) {
     res.send('Hello Sir')
+})
+
+app.get('/orders/all', function (req, res) {
+    res.send([orders[0]]);
 })
 
 app.post('/auth/login', function (req, res) {
@@ -119,6 +133,7 @@ app.post('/auth/login', function (req, res) {
             token: 'fake-jwt-token'
         };
 
+        res.cookie('token', 'more-fake-jwt-token', {httpOnly: true});
         console.log("RESP: ", JSON.stringify(responseJson));
         res.status(200).send(responseJson);
     } else {
@@ -140,6 +155,28 @@ app.get('/users', function (req, res) {
         // return 401 not authorised if token is null or invalid
         res.status(401).send('Unauthorised');
     }
+});
+
+app.get('/order/from/list', function (req, res) {
+    let idList = req.query.id;
+    console.log("TOKEN:: ", req.cookie);
+
+    let findProd = [];
+    try {
+        console.log('idlist: ', typeof idList)
+        let ids = JSON.parse(idList);
+        findProd = products.filter(prod => {
+            return Array.isArray(ids) ? ids.includes(prod.id) : prod.id === ids;
+        });
+
+    } catch (e) {
+        console.log('error: ', e);
+        res.status(400).send("bad req");
+        return;
+    }
+
+    console.log("USER ORDERED: ", findProd, " WITH TOKEN ");
+    res.status(200).send(findProd);
 });
 
 app.get('/categories', function (req, res) {
@@ -165,6 +202,11 @@ app.get('/products/from/list', function (req, res) {
     }
     res.status(200).send(findProd);
 });
+
+app.get('/brands', function (req, res) {
+    res.status(200).send(brands);
+});
+
 
 app.get('/products', function (req, res) {
     let cats = req.query.cat;

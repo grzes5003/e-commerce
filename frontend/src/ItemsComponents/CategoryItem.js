@@ -23,7 +23,7 @@ const CategoryItem = props => {
         >
             <Flex>
                 <Image objectFit="cover"
-                       src=""
+                       src="http://placeimg.com/640/480/business"
                        alt=""
                        fallbackSrc={itemConstants.FALLBACK_IMG_URL}
                        boxSize="200px"

@@ -1,0 +1,6 @@
+port = 4040
+host = "0.0.0.0"
+mock= false
+
+[debug]
+DB_URL="mysql://ecommerce_www:ecommerce_www@localhost:3306/ecommerce"

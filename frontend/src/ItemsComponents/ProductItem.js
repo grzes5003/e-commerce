@@ -111,6 +111,46 @@ const ProductItem = props => {
         )
     }
 
+    if (type === componentConstants.ORDER_PRODUCT) {
+        return (
+            <Flex borderWidth="1px" borderColor="teal.500" borderRadius="sm" overflow="hidden" flexWrap="wrap"
+                  flexDirection="row" w="inherit"
+            >
+                <Box p={3} maxW={200} minW={100}>
+                    <Image
+                        src={picture}
+                        fallbackSrc={itemConstants.FALLBACK_IMG_URL}
+                        alt=""
+                        boxShadow="6px 6px teal"
+                        borderWidth="1px"
+                        borderColor="teal.500"
+                        onClick={handleGoToItem}
+                        className="navBarLogo"
+                        boxSize="100px"
+                    />
+                </Box>
+                <Box flex={1} maxW={290}>
+                    <Heading
+                        p={2}
+                        size="md"
+                        lineHeight="tight"
+                        isTruncated
+                        onClick={handleGoToItem}
+                        className="navBarLogo"
+                        w={{sm: "inherit"}}
+                    >
+                        {name}
+                        <Box bgGradient="linear(to-r, red.500, yellow.500)" boxShadow="3px 3px teal" w="100%" h={1}
+                             pos="relative" transform="translate(5px,-10px)" zIndex="-5"/>
+                    </Heading>
+                    <Heading size="md" p={1}>
+                        {parseFloat(price).toFixed(2)} $
+                    </Heading>
+                </Box>
+            </Flex>
+        )
+    }
+
     if (type === componentConstants.CATALOG_PRODUCT) {
         return (
             <Flex borderWidth="0px" borderColor="teal.500" borderRadius="sm" overflow="hidden" flexWrap="wrap"
