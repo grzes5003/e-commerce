@@ -23,6 +23,16 @@ export function authentication(state = initialState, action) {
             return {
                 logout_successful: true
             };
+
+            // register
+        case userConstants.REGISTER_SUCCESS:
+            return {
+                success: true
+            }
+        case userConstants.REGISTER_FAILURE:
+            return {
+                error: action.error
+            }
         default:
             return state
     }

@@ -5,13 +5,17 @@ use fake::{Dummy, Fake, Faker};
 use serde::{Serialize, Deserialize};
 use mysql::{Pool, Error, params, Row, from_row, from_value, Value};
 
-use crate::model::{product::Product, category::Category, order::Order as Order_details, cmp::{CmpPrice, CmpName}, filter::{Filter, Order, Param}};
+use crate::model::{product::Product, category::Category, order::Order as Order_details, cmp::{CmpPrice, CmpName}, filter::{Filter, Order, Param}, brand::Brand};
 
 use std::env;
 use std::fs;
 use std::io;
 use mysql::prelude::{Queryable, FromValue, FromRow, ToValue};
 use mysql::time::Date;
+use crate::api::user_handlers::{LoginData, UserData, RegisterData};
+use argon2::{self, Config};
+use regex::Regex;
+use std::io::Bytes;
 
 #[derive(Serialize)]
 pub struct Res {
@@ -26,8 +30,12 @@ pub trait Database {
     fn get_products_from_list(&self, id_list: Vec<u16>) -> Vec<Product>;
     fn get_all_categories(&self) -> Vec<Category>;
     fn get_all_orders(&self, user_id: u64) -> Vec<Order_details>;
+    fn get_all_brands(&self) -> Vec<Brand>;
 
     fn order_from_cart(&self, _items: Vec<u16>, _user_id: u64) -> Result<(), ()>;
+
+    fn login(&self, login_data: LoginData) -> Option<UserData>;
+    fn register(&self, register_data: RegisterData) -> Result<(), ()>;
 }
 
 #[derive(Clone)]
@@ -149,7 +157,20 @@ impl Database for DatabaseMySql {
 
         let mut conn_ = conn.unwrap();
         let result = conn_.query_iter("SELECT id, name FROM categories;").unwrap();
-        return result.into_iter().map(|row| Category::from(from_row::<(u8, String)>(row.unwrap()))).collect::<Vec<Category>>();
+        result.into_iter().map(|row| Category::from(from_row::<(u8, String)>(row.unwrap()))).collect::<Vec<Category>>()
+    }
+
+    fn get_all_brands(&self) -> Vec<Brand> {
+        let mut conn = self.pool.get_conn();
+
+        if let Err(e) = conn {
+            warn!("Cannot get connection to db, {}", e);
+            return Vec::new();
+        }
+
+        let mut conn_ = conn.unwrap();
+        let result = conn_.query_iter("SELECT id, name FROM brands;").unwrap();
+        result.into_iter().map(|row| Brand::from(from_row::<(u8, String)>(row.unwrap()))).collect::<Vec<Brand>>()
     }
 
     fn get_all_orders(&self, user_id: u64) -> Vec<Order_details> {
@@ -234,7 +255,89 @@ impl Database for DatabaseMySql {
                     "order_id" => last_row_id,
                     "item_id" => item_id,
                 }), );
-        match res {Ok(_) => Ok(()), Err(e) => {warn!("{:?}", e); Err(())}}
+        match res {
+            Ok(_) => Ok(()),
+            Err(e) => {
+                warn!("{:?}", e);
+                Err(())
+            }
+        }
+    }
+
+    fn login(&self, login_data: LoginData) -> Option<UserData> {
+        let mut conn = self.pool.get_conn();
+
+        if let Err(e) = conn {
+            warn!("Cannot get connection to db, {}", e);
+            return None;
+        }
+
+        let re = Regex::new(r"^[a-zA-Z0-9_.-]*$").unwrap();
+        if re.is_match(login_data.username.as_str()) {
+            let mut conn_ = conn.unwrap();
+
+            if let Ok(stmt) = conn_.prep("SELECT passwd FROM customers WHERE nickname=:username OR email=:username;") {
+                let result: Option<String> = conn_.exec_first(&stmt, params! {"username" => &login_data.username}).unwrap();
+                info!("Inside result={:?}", result);
+                return match result {
+                    Some(hash) => {
+                        info!("Verify {:?}", argon2::verify_encoded(hash.as_str(), &login_data.password.as_bytes()));
+                        if argon2::verify_encoded(hash.as_str(), &login_data.password.as_bytes()).unwrap() {
+                            info!("Inside verified");
+                            let user_data_stmt = conn_.prep("SELECT id, nickname, name, surname, email FROM customers WHERE nickname=:username OR email=:username;").unwrap();
+                            let user_data_raw = conn_.exec_first(&user_data_stmt, params! {"username" => &login_data.username}).unwrap();
+                            return Some(UserData::from(from_row::<(u16, String, String, String, String)>(user_data_raw.unwrap())))
+                        }
+                        None
+                    }
+                    None => None
+                };
+            }
+        }
+        None
+    }
+
+    fn register(&self, register_data: RegisterData) -> Result<(), ()> {
+        let mut conn = self.pool.get_conn();
+        let re = Regex::new(r"^[a-zA-Z0-9_.-]*$").unwrap();
+        let salt = b"veryrandomsalt";
+        let config = Config::default();
+
+        if let Err(e) = conn {
+            warn!("Cannot get connection to db, {}", e);
+            return Err(());
+        }
+
+        if re.is_match(register_data.nickname.as_str())
+            && re.is_match(register_data.surname.as_str())
+            && re.is_match(register_data.email.as_str())
+            && register_data.nickname.len() > 0
+            && register_data.surname.len() > 0
+            && register_data.email.len() > 0
+            && register_data.passwd.len() > 0
+        {
+
+            // check if user exist
+
+            let hash = argon2::hash_encoded(register_data.passwd.as_bytes(), salt, &config).unwrap();
+            info!("Approved input");
+            let mut conn_ = conn.unwrap();
+            if let Ok(stmt) = conn_.prep(
+                "INSERT INTO customers (name, surname, email, passwd, nickname)
+                    VALUES (:name, :surname, :email, :passwd, :nickname);"
+            ) {
+                info!("Inside passwd={:?} {}", &hash, &hash.len());
+                let res = conn_.exec_drop(&stmt, params! {
+                "name"=> &register_data.nickname, "surname"=> &register_data.surname,
+                "email"=> &register_data.email, "passwd"=> &hash, "nickname"=> &register_data.nickname
+                });
+                info!("Query result {:?}", res);
+                return Ok(())
+            }
+            info!("Out");
+        }
+
+        Err(())
     }
 }
 
@@ -325,6 +428,21 @@ impl Database for DatabaseMock {
     }
 
     fn order_from_cart(&self, _items: Vec<u16>, _user_id: u64) -> Result<(), ()> {
+        unimplemented!();
+        Err(())
+    }
+
+    fn get_all_brands(&self) -> Vec<Brand> {
+        unimplemented!();
+        vec![]
+    }
+
+    fn login(&self, login_data: LoginData) -> Option<UserData> {
+        unimplemented!();
+        None
+    }
+
+    fn register(&self, register_data: RegisterData) -> Result<(), ()> {
         unimplemented!();
         Err(())
     }

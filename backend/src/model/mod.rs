@@ -5,3 +5,4 @@ pub mod cmp;
 pub mod filter;
 pub mod deserializer;
 pub mod order;
+pub mod brand;

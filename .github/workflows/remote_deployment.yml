@@ -26,7 +26,7 @@ jobs:
             cd frontend
             npm install
             npm run build
-            cd ../backend-rust
+            cd ../backend
             cargo build --release
-            ./target/release/backend-rust > ../../rust-log.03-02-2021.log &
+            DB_URL=${{ secrets.DB_URL }} RUST_LOG=info ./target/release/backend > ../../rust-log.03-02-2021.log &
             ps aux | grep g13

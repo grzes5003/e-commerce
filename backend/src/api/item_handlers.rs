@@ -63,3 +63,11 @@ pub async fn get_all_categories(db: web::Data<Box<dyn Database>>) -> impl Respon
         .content_type("application/json")
         .json(db.get_all_categories())
 }
+
+#[get("/brands")]
+pub async fn get_all_brands(db: web::Data<Box<dyn Database>>) -> impl Responder {
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .json(db.get_all_brands())
+}
+
