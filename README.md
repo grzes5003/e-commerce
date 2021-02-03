@@ -3,7 +3,7 @@
 # BLUEPRINT
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Basic e-commerce with registering system, cart and ordering system. 
+Basic e-commerce with registering system, cart and ordering system. Currently hosted on <https://g13.labagh.pl>.
 
 ## Getting started
 
