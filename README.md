@@ -1,7 +1,9 @@
-# e-commerce
+![alt text](git_resources/logo.png)
 > React.js (Chakra UI) + Redux, server Rust + Actix
+# BLUEPRINT
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Basic e-commerce with registering system, cart and ordering system.
+Basic e-commerce with registering system, cart and ordering system. Currently hosted on <https://g13.labagh.pl>.
 
 ## Getting started
 
@@ -20,3 +22,21 @@ cd ../backend-rust
 cargo build --release
 cargo run --release
 ```
+
+## Screenshots
+A few screenshots of app.
+
+> Home Page
+![alt text](git_resources/sc01.png)
+
+> Product page view
+![alt text](git_resources/sc02.png)
+
+> Cart details page
+![alt text](git_resources/sc03.png)
+
+> Register page
+![alt text](git_resources/sc04.png)
+
+> Products list page
+![alt text](git_resources/sc05.png)

@@ -30,3 +30,4 @@ jobs:
             cargo build --release
             DB_URL=${{ secrets.DB_URL }} RUST_LOG=info ./target/release/backend > ../../rust-log.03-02-2021.log &
             ps aux | grep g13
+            exit
