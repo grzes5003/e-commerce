@@ -316,12 +316,18 @@ impl Database for DatabaseMySql {
             && register_data.email.len() > 0
             && register_data.passwd.len() > 0
         {
+            let mut conn_ = conn.unwrap();
 
             // check if user exist
+            let user_search_stmt = conn_.prep("SELECT id FROM customers WHERE nickname=:username OR email=:username;").unwrap();
+            let user_search_result: Option<u16> = conn_.exec_first(&user_search_stmt, params! {"username" => &register_data.nickname}).unwrap();
+
+            if let Some(_) = user_search_result {
+                return Err(())
+            }
 
             let hash = argon2::hash_encoded(register_data.passwd.as_bytes(), salt, &config).unwrap();
             info!("Approved input");
-            let mut conn_ = conn.unwrap();
             if let Ok(stmt) = conn_.prep(
                 "INSERT INTO customers (name, surname, email, passwd, nickname)
                     VALUES (:name, :surname, :email, :passwd, :nickname);"
