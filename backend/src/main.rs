@@ -130,7 +130,7 @@ async fn main() -> std::io::Result<()> {
                     .route(web::get().to(index)),
             )
     })
-        .bind("localhost:4040")?
+        .bind(env::var("URL").unwrap_or("localhost:4040".to_string()))?
         .run()
         .await
 }
