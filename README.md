@@ -5,7 +5,7 @@
 
 > **_NOTE:_**  Temporary hosting on AWS with HTTP only (no TLS).
 
-Basic e-commerce with registering system, cart and ordering system. Currently hosted on <http://ec2-18-206-198-237.compute-1.amazonaws.com/>.
+Basic e-commerce with registering system, cart and ordering system. Currently hosted on Amazon Web Services.
 
 ## Getting started
 
