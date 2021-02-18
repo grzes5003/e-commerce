@@ -3,7 +3,9 @@
 # BLUEPRINT
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Basic e-commerce with registering system, cart and ordering system. Currently hosted on <https://g13.labagh.pl>.
+> **_NOTE:_**  Temporary hosting on AWS with HTTP only (no TLS).
+
+Basic e-commerce with registering system, cart and ordering system. Currently hosted on <http://ec2-18-206-198-237.compute-1.amazonaws.com/>.
 
 ## Getting started
 
